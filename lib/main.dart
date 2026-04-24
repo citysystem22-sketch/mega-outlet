@@ -4,14 +4,24 @@ import 'config/app_config.dart';
 import 'screens/home_screen.dart';
 
 void main() async {
+  // 1. Initialize Flutter bindings first
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Set preferred orientations
+  // 2. Lock to portrait orientation
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   
+  // 3. Set system UI style (async but returns void)
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFFF6B00),
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+  
+  // 4. Run app
   runApp(const MegaOutletApp());
 }
 
