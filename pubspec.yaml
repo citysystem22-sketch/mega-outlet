@@ -1,5 +1,5 @@
 name: mega_outlet_app
-description: "Mega Outlet - WooCommerce WebView Android App with FCM Push Notifications"
+description: "Mega Outlet - WooCommerce WebView Android App with Push Notifications"
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -13,10 +13,10 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  # WebView - using version 4.2.2 which has legacy API
+  # WebView
   webview_flutter: 4.2.2
 
-  # Firebase
+  # Firebase (requires valid google-services.json for full functionality)
   firebase_core: ^2.27.0
   firebase_messaging: ^14.9.2
 

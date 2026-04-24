@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'config/app_config.dart';
 import 'screens/home_screen.dart';
 
@@ -13,8 +14,13 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   
-  // Initialize Firebase
-  await Firebase.initializeApp();
+  // Initialize Firebase - if this fails, app will work but notifications won't
+  try {
+    await Firebase.initializeApp();
+    debugPrint('Firebase initialized');
+  } catch (e) {
+    debugPrint('Firebase init failed: $e (push notifications disabled)');
+  }
   
   runApp(const MegaOutletApp());
 }
