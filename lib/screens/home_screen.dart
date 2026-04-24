@@ -32,26 +32,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initializeWebView() async {
+    // Initialize WebView first (even if notifications fail)
     try {
-      await NotificationService.instance.initialize(
-        onNotificationTapped: _handleNotificationTap,
-      );
-
       _controller = await _webviewService.initialize();
-
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
-        });
-      }
+      debugPrint('WebView initialized successfully');
     } catch (e) {
+      debugPrint('WebView initialization error: $e');
       if (mounted) {
         setState(() {
           _isInitializing = false;
           _hasError = true;
-          _errorMessage = 'Failed to initialize: $e';
+          _errorMessage = 'WebView error: $e';
         });
+        return;
       }
+    }
+    
+    // Then initialize notifications (non-blocking)
+    try {
+      await NotificationService.instance.initialize(
+        onNotificationTapped: _handleNotificationTap,
+      );
+    } catch (e) {
+      debugPrint('Notification init error (non-critical): $e');
+    }
+    
+    if (mounted) {
+      setState(() {
+        _isInitializing = false;
+      });
     }
   }
 

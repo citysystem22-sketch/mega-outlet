@@ -1,5 +1,4 @@
 import 'dart:ui' show Color;
-import 'package:flutter/foundation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../config/app_config.dart';
 
@@ -53,9 +52,7 @@ class WebViewService {
       )
       ..addJavaScriptChannel(
         'FlutterChannel',
-        onMessageReceived: (JavaScriptMessage message) {
-          debugPrint('JavaScript message received: ${message.message}');
-        },
+        onMessageReceived: (JavaScriptMessage message) {},
       );
     
     _controller = controller;
