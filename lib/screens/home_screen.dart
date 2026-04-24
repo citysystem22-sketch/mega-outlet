@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../config/app_config.dart';
 import '../services/webview_service.dart';
-import '../services/notification_service.dart';
 import '../utils/helpers.dart';
 import '../widgets/app_webview.dart';
 import '../widgets/app_drawer.dart';
@@ -32,12 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initializeWebView() async {
-    // Initialize WebView first (even if notifications fail)
+    // Initialize WebView 
     try {
       _controller = await _webviewService.initialize();
-      debugPrint('WebView initialized successfully');
     } catch (e) {
-      debugPrint('WebView initialization error: $e');
       if (mounted) {
         setState(() {
           _isInitializing = false;
@@ -46,15 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
         });
         return;
       }
-    }
-    
-    // Then initialize notifications (non-blocking)
-    try {
-      await NotificationService.instance.initialize(
-        onNotificationTapped: _handleNotificationTap,
-      );
-    } catch (e) {
-      debugPrint('Notification init error (non-critical): $e');
     }
     
     if (mounted) {
