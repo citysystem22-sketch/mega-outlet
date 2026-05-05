@@ -297,7 +297,33 @@ namespace MegaOutletCheck.Services
                         if (content.TrimStart().StartsWith("<") && !content.StartsWith("["))
                         {
                             throw new HttpRequestException(
-                                $"Server returned HTML instead of JSON. Check store URL is correct: {lastUrl}");
+                                $"Server returned HTML instead of JSON. Check store URL is correct.");
+                        }
+                        
+                        // Check for WooCommerce error response (JSON object with "code" or "message")
+                        var trimmed = content.TrimStart();
+                        if (trimmed.StartsWith("{") && trimmed.Contains("\"code\""))
+                        {
+                            // Try to extract error message
+                            try {
+                                var errorObj = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(content);
+                                string? errorMsg = errorObj?.message ?? errorObj?.error;
+                                if (!string.IsNullOrEmpty(errorMsg))
+                                {
+                                    throw new HttpRequestException($"WooCommerce error: {errorMsg}");
+                                }
+                            } catch { throw; }
+                        }
+                        
+                        // Handle empty array results - this is OK, not an error
+                        if (trimmed == "[]")
+                        {
+                            App.Log("API Response: empty results");
+                            if (typeof(T) == typeof(List<Product>))
+                            {
+                                return new List<Product>() as T;
+                            }
+                            return Array.Empty<Product>() as T;
                         }
                         
                         App.Log($"API Response success ({content.Length} chars)");
