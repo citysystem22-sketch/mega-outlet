@@ -223,15 +223,15 @@ namespace MegaOutletCheck.Services
                 App.Log($"[DEMO] {p.Name}: StockStatus={p.StockStatus}, StockQuantity={p.StockQuantity}, IsInStock={p.IsInStock}, Text={p.StockDisplayText}");
             }
 
-            // Filter by query - only show in-stock products
+            // Return all products (including out of stock) - let the UI handle visibility
             if (string.IsNullOrWhiteSpace(query) || query == "*")
             {
-                return allProducts.Where(p => p.IsInStock).ToArray();
+                return allProducts.ToArray();
             }
 
             return allProducts
-                .Where(p => (p.Name.ToLowerInvariant().Contains(queryLower) ||
-                          p.ShortDescription.ToLowerInvariant().Contains(queryLower)) && p.IsInStock)
+                .Where(p => p.Name.ToLowerInvariant().Contains(queryLower) ||
+                          p.ShortDescription.ToLowerInvariant().Contains(queryLower))
                 .ToArray();
         }
 

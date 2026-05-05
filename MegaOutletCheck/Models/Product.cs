@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace MegaOutletCheck.Models
 {
@@ -11,6 +12,17 @@ namespace MegaOutletCheck.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        
+        [JsonProperty("stock_quantity")]
+        public int StockQuantity { get; set; }
+        
+        [JsonProperty("stock_status")]
+        public string StockStatus { get; set; } = "instock";
+        
+        [JsonProperty("manage_stock")]
+        public bool ManageStock { get; set; }
+        
+        // Other properties (no JSON mapping needed - property names match)
         public string Slug { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
@@ -28,36 +40,26 @@ namespace MegaOutletCheck.Models
         public bool Downloadable { get; set; }
         public List<ProductImage> Images { get; set; } = new();
         public List<ProductCategory> Categories { get; set; } = new();
-        public List<ProductTag> Tags { get; set; } = new();
         public string AverageRating { get; set; } = string.Empty;
         public int ReviewCount { get; set; }
-        public int StockQuantity { get; set; }
-        public string StockStatus { get; set; } = "instock";
-        public bool ManageStock { get; set; }
-        public string Stock { get; set; } = string.Empty;
         public List<ProductAttribute> Attributes { get; set; } = new();
         public List<int> Variants { get; set; } = new();
         public string Permalink { get; set; } = string.Empty;
 
-        // Stock logic - CORRECT
+        // Stock logic
         public bool IsInStock
         {
             get
             {
+                // Check stock_status directly (mapped with JsonProperty)
                 if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "instock") return true;
                 if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "outofstock") return false;
+                // Otherwise check stock_quantity
                 return StockQuantity > 0;
             }
         }
         
-        public bool IsOutOfStock
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "outofstock") return true;
-                return StockQuantity <= 0;
-            }
-        }
+        public bool IsOutOfStock => !IsInStock;
         
         public bool IsLowStock => IsInStock && StockQuantity > 0 && StockQuantity <= 5;
 
