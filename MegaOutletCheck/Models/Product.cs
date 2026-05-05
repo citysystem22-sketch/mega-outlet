@@ -38,26 +38,64 @@ namespace MegaOutletCheck.Models
         public List<int> Variants { get; set; } = new();
         public string Permalink { get; set; } = string.Empty;
 
-        // Computed properties for UI
-        public string DisplayPrice => !string.IsNullOrEmpty(SalePrice) && SalePrice != RegularPrice 
-            ? $"{SalePrice} zł" 
-            : $"{RegularPrice} zł";
+        // Computed properties for UI - with fallbacks for missing data
+        public string DisplayPrice
+        {
+            get
+            {
+                // Check sale price first
+                if (!string.IsNullOrEmpty(SalePrice) && SalePrice != "0" && SalePrice != RegularPrice)
+                {
+                    return $"{SalePrice} zł";
+                }
+                // Check regular price
+                if (!string.IsNullOrEmpty(RegularPrice) && RegularPrice != "0")
+                {
+                    return $"{RegularPrice} zł";
+                }
+                // Fallback to price field
+                if (!string.IsNullOrEmpty(Price) && Price != "0")
+                {
+                    return $"{Price} zł";
+                }
+                return "Cena niedostępna";
+            }
+        }
         
-        public string DisplayOriginalPrice => !string.IsNullOrEmpty(SalePrice) && SalePrice != RegularPrice 
+        public string DisplayOriginalPrice => !string.IsNullOrEmpty(SalePrice) && SalePrice != "0" && SalePrice != RegularPrice 
             ? $"{RegularPrice} zł" 
             : string.Empty;
 
-        public bool IsInStock => StockStatus == "instock" || StockQuantity > 0;
-        public bool IsOutOfStock => StockStatus == "outofstock" || Stock == "outofstock";
+        public bool IsInStock
+        {
+            get
+            {
+                // Stock status from WooCommerce: "instock", "outofstock", "onbackorder"
+                if (StockStatus == "instock") return true;
+                if (StockStatus == "outofstock") return false;
+                if (StockStatus == "onbackorder") return false;
+                // Fallback: if stock quantity > 0, consider in stock
+                return StockQuantity > 0;
+            }
+        }
+        
+        public bool IsOutOfStock => StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity == 0;
+        
         public bool IsLowStock => StockStatus == "instock" && StockQuantity > 0 && StockQuantity <= 5;
 
         public string StockDisplayText
         {
             get
             {
-                if (IsOutOfStock) return "Niedostępny";
-                if (IsLowStock) return $"Ostatnie sztuki ({StockQuantity})";
-                return $"Dostępny ({StockQuantity})";
+                if (StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity == 0) 
+                    return "Niedostępny";
+                if (StockQuantity > 0 && StockQuantity <= 5) 
+                    return $"Ostatnie sztuki ({StockQuantity})";
+                if (StockQuantity > 0) 
+                    return $"Dostępny ({StockQuantity})";
+                if (StockStatus == "instock") 
+                    return "Dostępny";
+                return "Sprawdź w sklepie";
             }
         }
 

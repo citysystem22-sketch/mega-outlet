@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using MegaOutletCheck.Models;
 using MegaOutletCheck.Services;
 using MegaOutletCheck.ViewModels;
@@ -100,32 +101,34 @@ namespace MegaOutletCheck.Views
             
             if (isDarkMode)
             {
-                // Dark colors
-                resources["BackgroundBrush"] = System.Windows.Media.Brushes.Black;
-                resources["SurfaceBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 30));
-                resources["TextPrimaryBrush"] = System.Windows.Media.Brushes.White;
-                resources["TextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(180, 180, 180));
-                resources["PrimaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(96, 165, 250)); // Light blue
-                resources["ErrorBrush"] = System.Windows.Media.Brushes.OrangeRed;
-                resources["SuccessBrush"] = System.Windows.Media.Brushes.LightGreen;
-                resources["InStockBrush"] = System.Windows.Media.Brushes.LightGreen;
-                resources["OutOfStockBrush"] = System.Windows.Media.Brushes.Red;
-                resources["LowStockBrush"] = System.Windows.Media.Brushes.Orange;
+                // Dark mode colors
+                resources["BackgroundBrush"] = new SolidColorBrush(Color.FromRgb(15, 15, 20));
+                resources["SurfaceBrush"] = new SolidColorBrush(Color.FromRgb(30, 30, 40));
+                resources["TextPrimaryBrush"] = new SolidColorBrush(Color.FromRgb(240, 240, 245));
+                resources["TextSecondaryBrush"] = new SolidColorBrush(Color.FromRgb(140, 145, 155));
+                resources["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(96, 165, 250)); // Light blue
+                resources["ErrorBrush"] = new SolidColorBrush(Color.FromRgb(248, 113, 113)); // Light red
+                resources["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(74, 222, 128)); // Light green
+                resources["InStockBrush"] = new SolidColorBrush(Color.FromRgb(34, 197, 94)); // Green
+                resources["OutOfStockBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
+                resources["LowStockBrush"] = new SolidColorBrush(Color.FromRgb(251, 191, 36)); // Yellow
             }
             else
             {
-                // Light colors
-                resources["BackgroundBrush"] = System.Windows.Media.Brushes.White;
-                resources["SurfaceBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(248, 250, 252));
-                resources["TextPrimaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 41, 59));
-                resources["TextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 116, 139));
-                resources["PrimaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(37, 99, 235)); // Blue
-                resources["ErrorBrush"] = System.Windows.Media.Brushes.Red;
-                resources["SuccessBrush"] = System.Windows.Media.Brushes.Green;
-                resources["InStockBrush"] = System.Windows.Media.Brushes.Green;
-                resources["OutOfStockBrush"] = System.Windows.Media.Brushes.Red;
-                resources["LowStockBrush"] = System.Windows.Media.Brushes.Orange;
+                // Light mode colors
+                resources["BackgroundBrush"] = new SolidColorBrush(Color.FromRgb(248, 250, 252));
+                resources["SurfaceBrush"] = new SolidColorBrush(Colors.White);
+                resources["TextPrimaryBrush"] = new SolidColorBrush(Color.FromRgb(15, 23, 42));
+                resources["TextSecondaryBrush"] = new SolidColorBrush(Color.FromRgb(100, 116, 139));
+                resources["PrimaryBrush"] = new SolidColorBrush(Color.FromRgb(37, 99, 235)); // Blue
+                resources["ErrorBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
+                resources["SuccessBrush"] = new SolidColorBrush(Color.FromRgb(16, 185, 129)); // Green
+                resources["InStockBrush"] = new SolidColorBrush(Color.FromRgb(34, 197, 94)); // Green
+                resources["OutOfStockBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
+                resources["LowStockBrush"] = new SolidColorBrush(Color.FromRgb(245, 158, 11)); // Yellow
             }
+            
+            App.Log(isDarkMode ? "Dark mode applied" : "Light mode applied");
         }
 
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
