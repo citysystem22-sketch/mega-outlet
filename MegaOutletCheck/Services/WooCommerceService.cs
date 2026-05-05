@@ -303,7 +303,15 @@ namespace MegaOutletCheck.Services
         private async Task<Product[]> GetProductsAsync(Dictionary<string, string> queryParams)
         {
             var response = await GetAsync<List<Product>>("/wp-json/wc/v3/products", queryParams);
-            return response?.ToArray() ?? Array.Empty<Product>();
+            var products = response?.ToArray() ?? Array.Empty<Product>();
+            
+            // DEBUG: Log first product stock values
+            if (products.Length > 0)
+            {
+                App.Log($"[API] First product: {products[0].Name}, StockStatus='{products[0].StockStatus}', StockQuantity={products[0].StockQuantity}");
+            }
+            
+            return products;
         }
 
         private async Task<T?> GetAsync<T>(string endpoint, Dictionary<string, string>? queryParams = null)
