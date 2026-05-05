@@ -118,8 +118,7 @@ namespace MegaOutletCheck.Services
                 {
                     ["search"] = query,
                     ["per_page"] = perPage.ToString(),
-                    ["page"] = page.ToString(),
-                    ["orderby"] = "relevance"
+                    ["page"] = page.ToString()
                 });
 
                 // Cache the results
@@ -150,9 +149,7 @@ namespace MegaOutletCheck.Services
             return await GetProductsAsync(new Dictionary<string, string>
             {
                 ["per_page"] = perPage.ToString(),
-                ["page"] = page.ToString(),
-                ["orderby"] = "menu_order",
-                ["order"] = "asc"
+                ["page"] = page.ToString()
             });
         }
 
