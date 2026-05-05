@@ -173,14 +173,14 @@ namespace MegaOutletCheck.Views
         {
             if (sender is Button button && button.Tag is string category)
             {
-                _viewModel.SearchQuery = category;
+                _viewModel!.SearchQuery = category;
             }
         }
 
         private void ViewAllButton_Click(object sender, RoutedEventArgs e)
         {
             // Scroll to results or show all products
-            _viewModel.SearchQuery = "*";
+            _viewModel!.SearchQuery = "*";
         }
 
         private void SettingsOverlay_Click(object sender, MouseButtonEventArgs e)
