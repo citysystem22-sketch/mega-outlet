@@ -243,6 +243,12 @@ namespace MegaOutletCheck.Services
             urlBuilder.Append(WebUtility.UrlEncode(_consumerKey));
             urlBuilder.Append("&consumer_secret=");
             urlBuilder.Append(WebUtility.UrlEncode(_consumerSecret));
+            // Only add user_id if it's not default (some servers need it, some don't)
+            if (_settings.ApiUserId > 0)
+            {
+                urlBuilder.Append("&user_id=");
+                urlBuilder.Append(_settings.ApiUserId);
+            }
 
             var finalUrl = urlBuilder.ToString();
             
@@ -251,6 +257,13 @@ namespace MegaOutletCheck.Services
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, finalUrl);
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                
+                // Add Basic Auth header for servers that support it
+                var authString = $"{_consumerKey}:{_consumerSecret}";
+                var authBytes = System.Text.Encoding.UTF8.GetBytes(authString);
+                var authBase64 = Convert.ToBase64String(authBytes);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authBase64);
+                
                 return request;
             });
         }
@@ -320,7 +333,8 @@ namespace MegaOutletCheck.Services
                         }
                         else if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            throw new HttpRequestException("Invalid API keys - check consumer key/secret");
+                            throw new HttpRequestException(
+                                "Invalid API keys or no permission. Check API key has read access in WooCommerce → Settings → REST API");
                         }
                         else if (response.StatusCode == HttpStatusCode.Forbidden)
                         {

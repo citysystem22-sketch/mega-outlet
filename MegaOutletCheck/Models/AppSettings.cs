@@ -13,6 +13,7 @@ namespace MegaOutletCheck.Models
         public string StoreUrl { get; set; } = "https://mega-outlet.pl";
         public string ApiKey { get; set; } = string.Empty;
         public string ApiSecret { get; set; } = string.Empty;
+        public int ApiUserId { get; set; } = 1; // WooCommerce API requires user_id
         
         // Search settings
         public int SearchDebounceMs { get; set; } = 300;
@@ -46,8 +47,25 @@ namespace MegaOutletCheck.Models
         {
             get
             {
-                var exeDir = AppDomain.CurrentDomain.BaseDirectory;
-                return Path.Combine(exeDir, "settings.json");
+                var exePath = AppDomain.CurrentDomain.BaseDirectory;
+                // Try multiple locations
+                var paths = new[]
+                {
+                    Path.Combine(exePath, "settings.json"),
+                    Path.Combine(Directory.GetCurrentDirectory(), "settings.json"),
+                    Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase ?? "", "settings.json")
+                };
+                
+                foreach (var path in paths)
+                {
+                    if (File.Exists(path))
+                    {
+                        return path;
+                    }
+                }
+                
+                // Return first path as default
+                return paths[0];
             }
         }
 
