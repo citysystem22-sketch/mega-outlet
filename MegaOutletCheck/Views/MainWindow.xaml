@@ -134,7 +134,7 @@
                 Cursor="Hand"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
-                Margin="0,24,24,0">
+                Margin="0,70,24,0">
             <Button.Effect>
                 <DropShadowEffect BlurRadius="8" ShadowDepth="3" Opacity="0.3" Color="#000000"/>
             </Button.Effect>
@@ -289,7 +289,9 @@
                     Background="{StaticResource SurfaceBrush}"
                     CornerRadius="12"
                     Padding="16"
-                    Margin="0,8,0,8"
+                    Margin="24,8,24,8"
+                    MaxWidth="900"
+                    HorizontalAlignment="Center"
                     Visibility="Collapsed">
                 <StackPanel>
                     <Grid Margin="0,0,0,12">
