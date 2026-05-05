@@ -64,6 +64,16 @@
                             ToolTip="Wyczyść"/>
                 </Grid>
                 
+                <!-- Loading bar under search (browser-style) -->
+                <ProgressBar Grid.Row="1"
+                            IsIndeterminate="True"
+                            Height="3"
+                            Margin="0,2,0,0"
+                            VerticalAlignment="Top"
+                            Background="Transparent"
+                            Foreground="#3B82F6"
+                            Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                
                 <!-- Filter: Only Available -->
                 <CheckBox Grid.Column="1"
                           Content="✓ Tylko dostępne"
@@ -107,20 +117,6 @@
 
         <!-- Main Content Area -->
         <Grid Grid.Row="1" Margin="24,16">
-            <!-- Loading indicator -->
-            <StackPanel HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock Text="Szukam produkty..."
-                           FontSize="20"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           HorizontalAlignment="Center"/>
-                <ProgressBar IsIndeterminate="True"
-                             Width="200"
-                             Height="4"
-                             Margin="0,16,0,0"/>
-            </StackPanel>
-
             <!-- Error message -->
             <Border Background="#FFEBEE"
                     CornerRadius="8"
@@ -301,23 +297,6 @@
                     </UniformGrid>
                 </StackPanel>
             </Border>
-
-            <!-- No results message -->
-            <StackPanel HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Visibility="{Binding Products.Count, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}">
-                <TextBlock Text="🔍"
-                           FontSize="48"
-                           HorizontalAlignment="Center"/>
-                <TextBlock Text="Wpisz nazwę produktu"
-                           FontSize="20"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           Margin="0,16,0,0"/>
-                <TextBlock Text="Szukaj po nazwie lub SKU"
-                           FontSize="14"
-                           Foreground="{StaticResource TextSecondaryBrush}"
-                           HorizontalAlignment="Center"/>
-            </StackPanel>
         </Grid>
 
         <!-- Details Panel (slides in from right) -->
