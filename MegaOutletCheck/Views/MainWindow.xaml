@@ -110,24 +110,53 @@
                                FontWeight="SemiBold"/>
                 </Border>
 
-                <!-- On-Screen Keyboard Toggle -->
-                <Button Grid.Column="4"
-                        x:Name="KeyboardToggle"
-                        Content="⌨️"
-                        Click="KeyboardToggle_Click"
-                        ToolTip="Klawiatura ekranowa"
-                        Style="{StaticResource IconButton}"
-                        Margin="0,0,12,0"
-                        Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
-
                 <!-- Settings button -->
-                <Button Grid.Column="5"
+                <Button Grid.Column="4"
                         Content="⚙️"
                         Style="{StaticResource IconButton}"
                         Command="{Binding OpenSettingsCommand}"
                         ToolTip="Ustawienia"/>
             </Grid>
         </Border>
+
+        <!-- Floating Keyboard Button (FAB) -->
+        <Button x:Name="KeyboardToggle"
+                Content="⌨️"
+                Click="KeyboardToggle_Click"
+                ToolTip="Klawiatura ekranowa"
+                Width="56" Height="56"
+                FontSize="24"
+                Background="#3B82F6"
+                Foreground="White"
+                BorderThickness="0"
+                Cursor="Hand"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,0,24,24">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="3" Opacity="0.3" Color="#000000"/>
+            </Button.Effect>
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="28"
+                                        Padding="12">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#2563EB"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
 
         <!-- Main Content Area -->
         <Grid Grid.Row="1" Margin="24,16">
