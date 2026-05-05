@@ -312,8 +312,10 @@
                                        LineHeight="22"/>
                         </Border>
 
-                        <!-- Categories -->
-                        <ItemsControl ItemsSource="{Binding SelectedProduct.Categories}" Margin="0,16,0,0">
+                        <!-- Categories - Hidden per requirements -->
+                        <ItemsControl ItemsSource="{Binding SelectedProduct.Categories}" 
+                                    Margin="0,16,0,0"
+                                    Visibility="Collapsed">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel/>
