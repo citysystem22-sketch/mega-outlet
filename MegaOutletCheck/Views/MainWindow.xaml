@@ -40,19 +40,13 @@
                 </Grid.ColumnDefinitions>
                 
                 <!-- Logo -->
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,24,0">
-                    <TextBlock Text="MEGA OUTLET" 
-                               FontSize="22" 
-                               FontWeight="Bold" 
-                               Foreground="#1E40AF"/>
-                    <TextBlock Text="sprawdź dostępność" 
-                               FontSize="10" 
-                               Foreground="{StaticResource TextSecondaryBrush}" 
-                               Margin="0,-2,0,0"/>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0" MinWidth="100">
+                    <TextBlock Text="MEGA OUTLET" FontSize="18" FontWeight="Bold" Foreground="#1E40AF"/>
+                    <TextBlock Text="sprawdź dostępność" FontSize="9" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,-1,0,0"/>
                 </StackPanel>
 
                 <!-- Search Box -->
-                <Grid Grid.Column="6" Margin="0,0,16,0">
+                <Grid Grid.Column="1" Margin="0,0,16,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -95,7 +89,7 @@
                 </Grid>
                 
                 <!-- Filter: Only Available -->
-                <CheckBox Grid.Column="6"
+                <CheckBox Grid.Column="2"
                           Content="✓ Tylko dostępne"
                           IsChecked="{Binding ShowOnlyAvailable}"
                           VerticalAlignment="Center"
@@ -104,7 +98,7 @@
                           Margin="0,0,16,0"/>
 
                 <!-- Offline indicator -->
-                <Border Grid.Column="6"
+                <Border Grid.Column="3"
                          Background="{StaticResource LowStockBrush}"
                          CornerRadius="8"
                          Padding="12,8"
@@ -117,7 +111,7 @@
                 </Border>
 
                 <!-- On-Screen Keyboard Toggle -->
-                <Button Grid.Column="5"
+                <Button Grid.Column="4"
                         x:Name="KeyboardToggle"
                         Content="⌨️"
                         Click="KeyboardToggle_Click"
@@ -233,7 +227,7 @@
                                                        Margin="2,0,0,3"/>
                                         </StackPanel>
 
-                                        <Border Grid.Column="5"
+                                        <Border Grid.Column="4"
                                                 Background="{Binding Converter={StaticResource StockStatusToBrushConverter}}"
                                                 CornerRadius="4"
                                                 Padding="10,4"
@@ -579,7 +573,7 @@
                                            FontSize="12"
                                            Foreground="{StaticResource TextSecondaryBrush}"/>
                             </StackPanel>
-                            <CheckBox Grid.Column="5"
+                            <CheckBox Grid.Column="4"
                                      IsChecked="{Binding IsDarkMode}"
                                      VerticalAlignment="Center"/>
                         </Grid>
