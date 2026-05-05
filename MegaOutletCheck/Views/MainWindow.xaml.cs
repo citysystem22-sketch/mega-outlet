@@ -113,13 +113,6 @@ namespace MegaOutletCheck.Views
                 resources["InStockBrush"] = new SolidColorBrush(Color.FromRgb(34, 197, 94)); // Green
                 resources["OutOfStockBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
                 resources["LowStockBrush"] = new SolidColorBrush(Color.FromRgb(251, 191, 36)); // Yellow
-                resources["BorderBrush"] = new SolidColorBrush(Color.FromRgb(60, 60, 70)); // Dark border
-                
-                // Update window background directly
-                if (this.Background != null)
-                {
-                    this.Background = new SolidColorBrush(Color.FromRgb(15, 15, 20));
-                }
             }
             else
             {
@@ -134,16 +127,9 @@ namespace MegaOutletCheck.Views
                 resources["InStockBrush"] = new SolidColorBrush(Color.FromRgb(34, 197, 94)); // Green
                 resources["OutOfStockBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
                 resources["LowStockBrush"] = new SolidColorBrush(Color.FromRgb(245, 158, 11)); // Yellow
-                resources["BorderBrush"] = new SolidColorBrush(Color.FromRgb(226, 232, 240)); // Light border
-                
-                // Update window background directly
-                if (this.Background != null)
-                {
-                    this.Background = new SolidColorBrush(Color.FromRgb(248, 250, 252));
-                }
             }
             
-            App.Log("Theme applied: " + (isDarkMode ? "dark" : "light"));
+            App.Log(isDarkMode ? "Dark mode applied" : "Light mode applied");
         }
 
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
@@ -167,20 +153,6 @@ namespace MegaOutletCheck.Views
             {
                 _viewModel?.SelectProductCommand.Execute(product);
             }
-        }
-
-        private void CategoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is string category)
-            {
-                _viewModel!.SearchQuery = category;
-            }
-        }
-
-        private void ViewAllButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Scroll to results or show all products
-            _viewModel!.SearchQuery = "*";
         }
 
         private void SettingsOverlay_Click(object sender, MouseButtonEventArgs e)
@@ -231,5 +203,68 @@ namespace MegaOutletCheck.Views
 
         private const byte VK_TAB = 0x09;
         private const uint KEYEVENTF_KEYDOWN = 0x0000;
+
+        private void KeyboardToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (KeyboardPanel.Visibility == Visibility.Visible)
+            {
+                KeyboardPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                KeyboardPanel.Visibility = Visibility.Visible;
+                SearchBox.Focus();
+            }
+        }
+
+        private void KeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Content is string key)
+            {
+                string keyValue = key == "Space" ? " " : key;
+                
+                int caretIndex = SearchBox.CaretIndex;
+                string currentText = SearchBox.Text ?? "";
+                
+                if (caretIndex >= 0 && caretIndex <= currentText.Length)
+                {
+                    SearchBox.Text = currentText.Insert(caretIndex, keyValue);
+                    SearchBox.CaretIndex = caretIndex + keyValue.Length;
+                }
+                else
+                {
+                    SearchBox.Text += keyValue;
+                    SearchBox.CaretIndex = SearchBox.Text.Length;
+                }
+                
+                SearchBox_FilterChanged();
+            }
+        }
+
+        private void BackspaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int caretIndex = SearchBox.CaretIndex;
+            string currentText = SearchBox.Text ?? "";
+            
+            if (caretIndex > 0 && currentText.Length > 0)
+            {
+                SearchBox.Text = currentText.Remove(caretIndex - 1, 1);
+                SearchBox.CaretIndex = caretIndex - 1;
+                SearchBox_FilterChanged();
+            }
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            SearchBox_FilterChanged();
+        }
+
+        private void SearchBox_FilterChanged()
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.SearchQuery = SearchBox.Text;
+            }
+        }
     }
 }

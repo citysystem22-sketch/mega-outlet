@@ -5,7 +5,7 @@
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <!-- Colors - Light Mode Default -->
+            <!-- Colors -->
             <Color x:Key="PrimaryColor">#2563EB</Color>
             <Color x:Key="SecondaryColor">#1E293B</Color>
             <Color x:Key="AccentColor">#10B981</Color>
@@ -17,7 +17,6 @@
             <Color x:Key="LowStockColor">#F59E0B</Color>
             <Color x:Key="InStockColor">#22C55E</Color>
             <Color x:Key="OutOfStockColor">#EF4444</Color>
-            <Color x:Key="BorderColor">#E2E8F0</Color>
 
             <!-- Brushes -->
             <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
@@ -31,7 +30,6 @@
             <SolidColorBrush x:Key="LowStockBrush" Color="{StaticResource LowStockColor}"/>
             <SolidColorBrush x:Key="InStockBrush" Color="{StaticResource InStockColor}"/>
             <SolidColorBrush x:Key="OutOfStockBrush" Color="{StaticResource OutOfStockColor}"/>
-            <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
 
             <!-- Converters -->
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -124,13 +122,14 @@
                 </Setter>
             </Style>
 
-            <!-- Category Button - Touch Friendly -->
-            <Style x:Key="CategoryButton" TargetType="Button">
+            <!-- Keyboard Key Button -->
+            <Style x:Key="KeyboardKey" TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Padding" Value="20,16"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Height" Value="48"/>
+                <Setter Property="Margin" Value="2"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Template">
@@ -138,8 +137,7 @@
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border"
                                     Background="{TemplateBinding Background}"
-                                    CornerRadius="12"
-                                    Padding="{TemplateBinding Padding}">
+                                    CornerRadius="6">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
@@ -156,60 +154,8 @@
                 </Setter>
             </Style>
 
-            <!-- Text Button -->
-            <Style x:Key="TextButton" TargetType="Button">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="8"
-                                    Padding="12,8">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BackgroundBrush}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <!-- Toggle Button for Dark Mode -->
-            <Style x:Key="IconToggleButton" TargetType="ToggleButton">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border x:Name="border"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="20">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#30000000"/>
-                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#20000000"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+            <!-- Keyboard Space Button -->
+            <Style x:Key="KeyboardKeySpace" TargetType="Button" BasedOn="{StaticResource KeyboardKey}"/>
 
             <!-- TextBox Style -->
             <Style x:Key="SearchTextBox" TargetType="TextBox">
