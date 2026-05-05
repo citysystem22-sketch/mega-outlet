@@ -255,6 +255,7 @@ namespace MegaOutletCheck.ViewModels
         [RelayCommand]
         private void SelectProduct(Product product)
         {
+            product?.ResetImageIndex(); // Reset gallery to first image
             SelectedProduct = product;
             IsDetailsPanelOpen = true;
         }
@@ -263,6 +264,20 @@ namespace MegaOutletCheck.ViewModels
         private void CloseDetailsPanel()
         {
             IsDetailsPanelOpen = false;
+        }
+
+        [RelayCommand]
+        private void NextProductImage()
+        {
+            SelectedProduct?.NextImage();
+            OnPropertyChanged(nameof(SelectedProduct));
+        }
+
+        [RelayCommand]
+        private void PreviousProductImage()
+        {
+            SelectedProduct?.PreviousImage();
+            OnPropertyChanged(nameof(SelectedProduct));
         }
 
         [RelayCommand]

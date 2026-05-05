@@ -119,6 +119,42 @@ namespace MegaOutletCheck.Models
 
         public string PrimaryImageUrl => Images?.Count > 0 ? Images[0].Src : string.Empty;
         
+        // Gallery: current image index and navigation
+        private int _currentImageIndex = 0;
+        public int CurrentImageIndex 
+        { 
+            get => _currentImageIndex;
+            set => _currentImageIndex = Math.Max(0, Math.Min(value, Math.Max(0, Images?.Count ?? 1) - 1));
+        }
+        
+        public string CurrentImageUrl
+        {
+            get
+            {
+                if (Images == null || Images.Count == 0) return string.Empty;
+                var index = Math.Min(_currentImageIndex, Images.Count - 1);
+                return index >= 0 ? Images[index].Src : Images[0].Src;
+            }
+        }
+        
+        public void NextImage() 
+        {
+            if (Images != null && Images.Count > 1)
+            {
+                _currentImageIndex = (_currentImageIndex + 1) % Images.Count;
+            }
+        }
+        
+        public void PreviousImage()
+        {
+            if (Images != null && Images.Count > 1)
+            {
+                _currentImageIndex = (_currentImageIndex - 1 + Images.Count) % Images.Count;
+            }
+        }
+        
+        public void ResetImageIndex() => _currentImageIndex = 0;
+        
         // Get all image URLs for gallery
         public List<string> ImageUrls => Images?.Where(i => !string.IsNullOrEmpty(i.Src)).Select(i => i.Src).ToList() ?? new List<string>();
         

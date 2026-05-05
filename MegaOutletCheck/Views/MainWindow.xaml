@@ -32,6 +32,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Search Box -->
@@ -66,20 +68,11 @@
                           IsChecked="{Binding ShowOnlyAvailable}"
                           VerticalAlignment="Center"
                           FontSize="13"
-                          Foreground="{StaticResource TextPrimaryBrush}"/>
-
-                <!-- On-Screen Keyboard Toggle -->
-                <Button Grid.Column="1"
-                        x:Name="KeyboardToggle"
-                        Content="⌨️"
-                        Click="KeyboardToggle_Click"
-                        ToolTip="Klawiatura ekranowa"
-                        Style="{StaticResource IconButton}"
-                        Margin="0,0,12,0"
-                        Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
+                          Foreground="{StaticResource TextPrimaryBrush}"
+                          Margin="0,0,16,0"/>
 
                 <!-- Offline indicator -->
-                <Border Grid.Column="1"
+                <Border Grid.Column="2"
                          Background="{StaticResource LowStockBrush}"
                          CornerRadius="8"
                          Padding="12,8"
@@ -91,8 +84,18 @@
                                FontWeight="SemiBold"/>
                 </Border>
 
+                <!-- On-Screen Keyboard Toggle -->
+                <Button Grid.Column="3"
+                        x:Name="KeyboardToggle"
+                        Content="⌨️"
+                        Click="KeyboardToggle_Click"
+                        ToolTip="Klawiatura ekranowa"
+                        Style="{StaticResource IconButton}"
+                        Margin="0,0,12,0"
+                        Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
+
                 <!-- Settings button -->
-                <Button Grid.Column="2"
+                <Button Grid.Column="4"
                         Content="⚙️"
                         Style="{StaticResource IconButton}"
                         Command="{Binding OpenSettingsCommand}"
@@ -350,14 +353,14 @@
                 <!-- Product details -->
                 <ScrollViewer Grid.Row="1" Margin="16" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <!-- Product Image Gallery - Larger Display -->
+                        <!-- Product Image Gallery - With Navigation -->
                         <Border Background="{StaticResource SurfaceBrush}"
                                 CornerRadius="12"
                                 Margin="0,16,0,16"
                                 MinHeight="320">
                             <Grid>
                                 <!-- Main Image -->
-                                <Image Source="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}"
+                                <Image Source="{Binding SelectedProduct.CurrentImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}"
                                        MaxHeight="380"
                                        Stretch="Uniform"
                                        RenderOptions.BitmapScalingMode="HighQuality"
@@ -371,17 +374,42 @@
                                            VerticalAlignment="Center"
                                            Visibility="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
                                 
+                                <!-- Previous Arrow (left) -->
+                                <Button Content="◀"
+                                        Command="{Binding PreviousProductImageCommand}"
+                                        Style="{StaticResource IconButton}"
+                                        FontSize="24"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Stretch"
+                                        Width="50"
+                                        Background="#80000000"
+                                        Foreground="White"
+                                        Visibility="{Binding SelectedProduct.Images.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                
+                                <!-- Next Arrow (right) -->
+                                <Button Content="▶"
+                                        Command="{Binding NextProductImageCommand}"
+                                        Style="{StaticResource IconButton}"
+                                        FontSize="24"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Stretch"
+                                        Width="50"
+                                        Background="#80000000"
+                                        Foreground="White"
+                                        Visibility="{Binding SelectedProduct.Images.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                
                                 <!-- Image count indicator -->
                                 <Border Background="#000000AA"
                                         CornerRadius="6"
                                         Padding="10,4"
-                                        HorizontalAlignment="Right"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Bottom"
                                         Margin="12"
                                         Visibility="{Binding SelectedProduct.Images.Count, Converter={StaticResource CountToVisibilityConverter}}">
                                     <TextBlock Foreground="White" FontSize="12" FontWeight="SemiBold">
+                                        <Run Text="{Binding SelectedProduct.CurrentImageIndex, Mode=OneWay}"/>
+                                        <Run Text="/"/>
                                         <Run Text="{Binding SelectedProduct.Images.Count, Mode=OneWay}"/>
-                                        <Run Text=" zdjęć"/>
                                     </TextBlock>
                                 </Border>
                             </Grid>
