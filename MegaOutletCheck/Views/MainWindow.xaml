@@ -88,6 +88,8 @@
                                 Foreground="#3B82F6"
                                 Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
+                    </Grid>
+                </Border>
                 
                 <!-- Filter: Only Available -->
                 <CheckBox Grid.Column="2"
@@ -187,6 +189,46 @@
 
             <!-- Product Results Grid -->
             <ScrollViewer Grid.Row="0"
+
+                <!-- Świeże okazje Slider (shown when NOT searching) -->
+                <Border Margin="0,0,0,16"
+                        Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
+                    <StackPanel>
+                        <TextBlock Text="✨ Świeże okazje"
+                                   FontSize="18" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   Margin="0,0,0,12"/>
+                        <ListBox ItemsSource="{Binding FeaturedProducts}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                BorderThickness="0" Background="Transparent">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Width="150" Margin="0,0,12,0" Padding="8"
+                                            Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" Style="{StaticResource BaseButton}">
+                                        <StackPanel>
+                                            <Image Source="{Binding Images[0].Src}" Height="100" Stretch="UniformToFill"/>
+                                            <TextBlock Text="{Binding Name}" FontSize="11" TextTrimming="CharacterEllipsis"
+                                                       MaxHeight="36" Margin="0,8,0,4"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Price}" FontWeight="Bold" FontSize="13" Foreground="#10B981"/>
+                                                <TextBlock Text="{Binding StockStatus}" FontSize="10" Margin="8,0,0,0"
+                                                           Foreground="{Binding StockStatus, Converter={StaticResource StockColorConverter}}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
                           x:Name="ResultsScrollViewer"
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"

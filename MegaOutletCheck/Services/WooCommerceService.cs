@@ -196,6 +196,19 @@ namespace MegaOutletCheck.Services
         }
 
         /// <summary>
+        /// Get newest products (by date)
+        /// </summary>
+        public async Task<Product[]> GetNewestProductsAsync(int count = 10)
+        {
+            return await GetProductsAsync(new Dictionary<string, string>
+            {
+                ["orderby"] = "date",
+                ["order"] = "desc",
+                ["per_page"] = count.ToString()
+            });
+        }
+
+        /// <summary>
         /// Get featured products (on sale)
         /// </summary>
         public async Task<Product[]> GetFeaturedProductsAsync(int count = 10)

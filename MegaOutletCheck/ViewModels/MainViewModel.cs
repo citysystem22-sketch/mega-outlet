@@ -73,6 +73,7 @@ namespace MegaOutletCheck.ViewModels
         private bool _isDarkMode;
         
         public ObservableCollection<Product> Products { get; } = new();
+        public ObservableCollection<Product> FeaturedProducts { get; } = new();
         
         public MainViewModel(AppSettings settings, WooCommerceService wooService, ProductCacheService cacheService)
         {
@@ -85,6 +86,24 @@ namespace MegaOutletCheck.ViewModels
             SettingsApiKey = settings.ApiKey;
             SettingsApiSecret = settings.ApiSecret;
             IsDarkMode = settings.IsDarkMode;
+            _ = LoadFeaturedProductsAsync();
+        }
+
+        private async Task LoadFeaturedProductsAsync()
+        {
+            try
+            {
+                var products = await _wooService.GetNewestProductsAsync(15);
+                FeaturedProducts.Clear();
+                foreach (var product in products)
+                {
+                    FeaturedProducts.Add(product);
+                }
+            }
+            catch
+            {
+                // Silent fail for featured products
+            }
         }
 
         partial void OnSearchQueryChanged(string value)
