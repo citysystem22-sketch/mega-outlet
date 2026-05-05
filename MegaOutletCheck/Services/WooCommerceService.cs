@@ -238,15 +238,15 @@ namespace MegaOutletCheck.Services
                 }
             };
 
-            // Filter by query
+            // Filter by query - only show in-stock products
             if (string.IsNullOrWhiteSpace(query) || query == "*")
             {
-                return allProducts.ToArray();
+                return allProducts.Where(p => p.IsInStock).ToArray();
             }
 
             return allProducts
-                .Where(p => p.Name.ToLowerInvariant().Contains(queryLower) ||
-                          p.ShortDescription.ToLowerInvariant().Contains(queryLower))
+                .Where(p => (p.Name.ToLowerInvariant().Contains(queryLower) ||
+                          p.ShortDescription.ToLowerInvariant().Contains(queryLower)) && p.IsInStock)
                 .ToArray();
         }
 

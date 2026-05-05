@@ -80,22 +80,29 @@ namespace MegaOutletCheck.Models
             }
         }
         
-        public bool IsOutOfStock => StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity == 0;
+        public bool IsOutOfStock => StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity <= 0;
         
-        public bool IsLowStock => StockStatus == "instock" && StockQuantity > 0 && StockQuantity <= 5;
+        public bool IsLowStock => (StockStatus == "instock" || StockQuantity > 0) && StockQuantity > 0 && StockQuantity <= 5;
 
         public string StockDisplayText
         {
             get
             {
-                if (StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity == 0) 
+                // Check out of stock first
+                if (StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity <= 0) 
                     return "Niedostępny";
+                // Low stock (1-5)
                 if (StockQuantity > 0 && StockQuantity <= 5) 
                     return $"Ostatnie sztuki ({StockQuantity})";
-                if (StockQuantity > 0) 
+                // In stock with quantity
+                if (StockQuantity > 5) 
                     return $"Dostępny ({StockQuantity})";
+                // Just "instock" with no quantity tracking
                 if (StockStatus == "instock") 
                     return "Dostępny";
+                // On back order
+                if (StockStatus == "onbackorder") 
+                    return "Zamówienie oczekujące";
                 return "Sprawdź w sklepie";
             }
         }
