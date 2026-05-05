@@ -166,7 +166,12 @@ namespace MegaOutletCheck.Services
                     StockStatus = "instock",
                     StockQuantity = 25,
                     ShortDescription = "Smartfon 5G",
-                    Images = new List<ProductImage>()
+                    Images = new List<ProductImage>
+                    {
+                        new ProductImage { Id = 101, Src = "https://picsum.photos/seed/samsung1/600/600", Name = "Samsung Front" },
+                        new ProductImage { Id = 102, Src = "https://picsum.photos/seed/samsung2/600/600", Name = "Samsung Back" },
+                        new ProductImage { Id = 103, Src = "https://picsum.photos/seed/samsung3/600/600", Name = "Samsung Side" }
+                    }
                 },
                 new Product
                 {
@@ -178,7 +183,13 @@ namespace MegaOutletCheck.Services
                     StockStatus = "instock",
                     StockQuantity = 8,
                     ShortDescription = "Laptop i7",
-                    Images = new List<ProductImage>()
+                    Images = new List<ProductImage>
+                    {
+                        new ProductImage { Id = 201, Src = "https://picsum.photos/seed/dell1/600/600", Name = "Dell Front" },
+                        new ProductImage { Id = 202, Src = "https://picsum.photos/seed/dell2/600/600", Name = "Dell Open" },
+                        new ProductImage { Id = 203, Src = "https://picsum.photos/seed/dell3/600/600", Name = "Dell Keyboard" },
+                        new ProductImage { Id = 204, Src = "https://picsum.photos/seed/dell4/600/600", Name = "Dell Side" }
+                    }
                 },
                 new Product
                 {
@@ -190,7 +201,11 @@ namespace MegaOutletCheck.Services
                     StockStatus = "instock",
                     StockQuantity = 3,
                     ShortDescription = "Słuchawki ANC",
-                    Images = new List<ProductImage>()
+                    Images = new List<ProductImage>
+                    {
+                        new ProductImage { Id = 301, Src = "https://picsum.photos/seed/sony1/600/600", Name = "Sony Black" },
+                        new ProductImage { Id = 302, Src = "https://picsum.photos/seed/sony2/600/600", Name = "Sony Case" }
+                    }
                 },
                 new Product
                 {
@@ -201,7 +216,11 @@ namespace MegaOutletCheck.Services
                     StockStatus = "outofstock",
                     StockQuantity = 0,
                     ShortDescription = "Tablet M2",
-                    Images = new List<ProductImage>()
+                    Images = new List<ProductImage>
+                    {
+                        new ProductImage { Id = 401, Src = "https://picsum.photos/seed/ipad1/600/600", Name = "iPad Front" },
+                        new ProductImage { Id = 402, Src = "https://picsum.photos/seed/ipad2/600/600", Name = "iPad Back" }
+                    }
                 },
                 new Product
                 {
@@ -213,7 +232,12 @@ namespace MegaOutletCheck.Services
                     StockStatus = "instock",
                     StockQuantity = 15,
                     ShortDescription = "Zegarek",
-                    Images = new List<ProductImage>()
+                    Images = new List<ProductImage>
+                    {
+                        new ProductImage { Id = 501, Src = "https://picsum.photos/seed/watch1/600/600", Name = "Watch Face" },
+                        new ProductImage { Id = 502, Src = "https://picsum.photos/seed/watch2/600/600", Name = "Watch Band" },
+                        new ProductImage { Id = 503, Src = "https://picsum.photos/seed/watch3/600/600", Name = "Watch Side" }
+                    }
                 }
             };
 

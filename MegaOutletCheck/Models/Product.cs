@@ -199,8 +199,14 @@ namespace MegaOutletCheck.Models
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
+        
+        [JsonProperty("src")]
         public string Src { get; set; } = string.Empty;
+        
+        [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
+        
+        [JsonProperty("alt")]
         public string Alt { get; set; } = string.Empty;
     }
 
