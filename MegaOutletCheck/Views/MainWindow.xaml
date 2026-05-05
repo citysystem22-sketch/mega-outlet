@@ -442,22 +442,25 @@
                                       FontWeight="SemiBold"/>
                         </Border>
 
-                        <!-- Description Section -->
+                        <!-- Description Section - Full Width -->
                         <TextBlock Text="Opis produktu"
-                                   FontSize="16"
+                                   FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource TextPrimaryBrush}"
-                                   Margin="0,8,0,8"/>
+                                   Margin="0,16,0,12"/>
                         
                         <Border Background="{StaticResource SurfaceBrush}"
-                                CornerRadius="8"
-                                Padding="16"
-                                Margin="0,0,0,16">
-                            <TextBlock Text="{Binding SelectedProduct.DisplayDescription}"
-                                       FontSize="14"
-                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                       TextWrapping="Wrap"
-                                       LineHeight="22"/>
+                                CornerRadius="12"
+                                Padding="20"
+                                Margin="0,0,0,16"
+                                MinHeight="120">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
+                                <TextBlock Text="{Binding SelectedProduct.DisplayDescription}"
+                                           FontSize="15"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"
+                                           LineHeight="26"/>
+                            </ScrollViewer>
                         </Border>
 
                         <!-- Categories - Hidden -->
