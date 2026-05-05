@@ -112,6 +112,13 @@ namespace MegaOutletCheck.Views
                 resources["InStockBrush"] = new SolidColorBrush(Color.FromRgb(34, 197, 94)); // Green
                 resources["OutOfStockBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
                 resources["LowStockBrush"] = new SolidColorBrush(Color.FromRgb(251, 191, 36)); // Yellow
+                resources["BorderBrush"] = new SolidColorBrush(Color.FromRgb(60, 60, 70)); // Dark border
+                
+                // Update window background directly
+                if (this.Background != null)
+                {
+                    this.Background = new SolidColorBrush(Color.FromRgb(15, 15, 20));
+                }
             }
             else
             {
@@ -126,9 +133,16 @@ namespace MegaOutletCheck.Views
                 resources["InStockBrush"] = new SolidColorBrush(Color.FromRgb(34, 197, 94)); // Green
                 resources["OutOfStockBrush"] = new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
                 resources["LowStockBrush"] = new SolidColorBrush(Color.FromRgb(245, 158, 11)); // Yellow
+                resources["BorderBrush"] = new SolidColorBrush(Color.FromRgb(226, 232, 240)); // Light border
+                
+                // Update window background directly
+                if (this.Background != null)
+                {
+                    this.Background = new SolidColorBrush(Color.FromRgb(248, 250, 252));
+                }
             }
             
-            App.Log(isDarkMode ? "Dark mode applied" : "Light mode applied");
+            App.Log("Theme applied: " + (isDarkMode ? "dark" : "light"));
         }
 
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)

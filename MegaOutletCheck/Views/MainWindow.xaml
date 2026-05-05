@@ -79,6 +79,16 @@
                         Style="{StaticResource IconButton}"
                         Command="{Binding OpenSettingsCommand}"
                         ToolTip="Ustawienia"/>
+                
+                <!-- Dark mode toggle -->
+                <ToggleButton Grid.Column="2"
+                             IsChecked="{Binding IsDarkMode}"
+                             Content="🌙"
+                             Width="40"
+                             Height="40"
+                             Margin="48,0,0,0"
+                             ToolTip="Tryb ciemny"
+                             Style="{StaticResource IconToggleButton}"/>
             </Grid>
         </Border>
 
