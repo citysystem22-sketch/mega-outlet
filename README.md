@@ -1,105 +1,81 @@
-# Mega Outlet - WooCommerce WebView Android App
+# Mega Outlet Product Check
 
-A production-ready Android application using Flutter that wraps your WooCommerce/WordPress e-commerce website in a WebView with push notifications support.
+A Windows desktop application for checking WooCommerce product availability, price, and description. Designed for in-store customers in physical retail locations.
 
 ## Features
 
-### Core Features
-- **WebView** - Full-screen WebView displaying your website (configurable URL)
-- **Back Navigation** - Android back button navigates through WebView history properly
-- **Loading Indicator** - Shows progress while pages load
-- **Error Handling** - Graceful handling of SSL errors and network failures with retry button
+- **Live Search** - Real-time product search as you type (300ms debounce)
+- **Stock Status** - Color-coded display (green=available, red=out of stock, orange=low stock)
+- **Touch Optimized** - Large, touch-friendly UI elements for tablet/kiosk use
+- **Polish Language** - Full Polish localization
+- **Offline Mode** - Caches products for offline fallback
+- **WooCommerce Integration** - Direct REST API v3 connection
 
-### Push Notifications
-- **Firebase Cloud Messaging (FCM)** - Integrated for push notifications
-- **Server Notifications** - Supports notifications sent from your server
-- **Deep Linking** - Tapping notifications opens relevant URLs in the WebView
-- **Android 13+ Support** - Proper permission handling
+## Quick Start
 
-### UI/UX
-- **Splash Screen** - Clean splash with logo during initialization
-- **Hamburger Menu** - Side menu with:
-  - Home (reload website)
-  - Back / Forward navigation
-  - Refresh
-  - Open in external browser
+### Download & Run
 
-### Google Play Compliance
-- Not a "thin wrapper" - includes push notifications, navigation, splash, error handling
-- Ready for Play Store publishing
+**Requires Windows 10/11 (64-bit)**
 
-## Build Instructions
+1. **Download these two files:**
+   - [MegaOutletCheck.exe](./MegaOutletCheck/publish/MegaOutletCheck.exe) (~158 MB)
+   - [settings.json](./MegaOutletCheck/publish/settings.json)
 
-### Prerequisites
-- Flutter 3.24.5+
-- Android SDK
-- Java 17+
+2. **Place both files in the same folder**
 
-### Debug Build
+3. **Run `MegaOutletCheck.exe`**
+
+That's it! The app is pre-configured with mega-outlet.pl API keys.
+
+## Building from Source (Optional)
+
+If you want to build yourself:
+
 ```bash
-flutter pub get
-flutter build apk --debug
-```
-
-### Release Build (AAB)
-```bash
-flutter build appbundle --release
-```
-
-### Release Build (APK)
-```bash
-flutter build apk --release
+# Requires .NET 8.0 SDK
+dotnet publish MegaOutletCheck -c Release -r win-x64 --self-contained true -o publish
 ```
 
 ## Configuration
 
-### App URL
-Edit `/lib/config/app_config.dart` to change the website URL:
-```dart
-static const String websiteUrl = 'https://mega-outlet.pl';
+The `settings.json` file contains your store configuration:
+
+```json
+{
+  "StoreUrl": "https://mega-outlet.pl",
+  "ApiKey": "ck_...",
+  "ApiSecret": "cs_...",
+  "EnableCache": true
+}
 ```
 
-### Firebase Setup
-1. Create a Firebase project at https://console.firebase.google.com
-2. Add your Android app with package name: `com.megaoutlet.mega_outlet_app`
-3. Download `google-services.json` and replace the placeholder in `android/app/google-services.json`
-4. Enable Cloud Messaging in Firebase console
-5. Upload APKs/AABs to Play Store with FCM enabled
+To change stores, generate new API keys in WooCommerce admin:
+- WooCommerce → Settings → Advanced → REST API
+- Create key with **Read** permissions
 
-## Testing Push Notifications
+## Usage
 
-### Via Firebase Console
-1. Go to Firebase Console > Cloud Messaging
-2. Create new campaign
-3. Compose notification with title and body
-4. Target your app
-5. In "Additional options", add custom data:
-   - Key: `url`
-   - Value: `https://mega-outlet.pl/product/product-name`
+1. Launch the app
+2. Type product name, SKU, or keywords
+3. Results appear automatically
+4. Click product to view details
 
-### From Your Server
-Send POST requests to FCM with data payload containing the URL.
+### Keyboard
+- **Escape** - Clear search
+- **F11** - Fullscreen mode
 
-## Project Structure
-```
-lib/
-├── config/
-│   └── app_config.dart     # App configuration
-├── utils/
-│   ├── constants.dart    # App constants
-│   └── helpers.dart    # Helper utilities
-├── services/
-│   ├── webview_service.dart      # WebView management
-│   └── notification_service.dart  # Push notifications
-├── screens/
-│   ├── home_screen.dart    # Main WebView screen
-│   └── error_screen.dart # Error display
-├── widgets/
-│   ├── app_webview.dart    # WebView widget
-│   ├── app_drawer.dart   # Navigation drawer
-│   └── loading_indicator.dart
-└── main.dart          # App entry point
-```
+## System Requirements
+
+- Windows 10/11 (64-bit)
+- No .NET runtime needed (self-contained)
+- ~200 MB disk space
+
+## Troubleshooting
+
+- **"Invalid API keys"** → Verify keys in WooCommerce
+- **"Connection failed"** → Check internet
+- **No products** → Try different search terms
 
 ## License
+
 MIT License
