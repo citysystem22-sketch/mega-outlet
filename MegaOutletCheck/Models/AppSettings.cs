@@ -26,6 +26,8 @@ namespace MegaOutletCheck.Models
         
         // Display settings
         public string Language { get; set; } = "pl-PL";
+        public bool IsDarkMode { get; set; } = false; // Default to light mode
+        public bool RememberCredentials { get; set; } = true; // Save credentials locally
         
         /// <summary>
         /// Check if API is configured

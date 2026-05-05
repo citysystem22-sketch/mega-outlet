@@ -381,6 +381,32 @@
                         <Button Content="Zapisz ustawienia"
                                 Style="{StaticResource PrimaryButton}"
                                 Command="{Binding SaveSettingsCommand}"/>
+
+                        <!-- Theme Toggle -->
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Tryb ciemny"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Włącz ciemny motyw dla wygodniejszego używania"
+                                           FontSize="12"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                            <CheckBox Grid.Column="1"
+                                     IsChecked="{Binding IsDarkMode}"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Remember Credentials -->
+                        <CheckBox Content="Zapamiętaj dane logowania"
+                                  IsChecked="{Binding Settings.RememberCredentials}"
+                                  Foreground="{StaticResource TextSecondaryBrush}"
+                                  Margin="0,16,0,0"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

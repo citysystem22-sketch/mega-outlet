@@ -35,6 +35,15 @@ namespace MegaOutletCheck.Views
                 _viewModel = new MainViewModel(settings, wooService, cacheService);
                 DataContext = _viewModel;
                 
+                // Wire up dark mode change
+                _viewModel.DarkModeChanged += OnDarkModeChanged;
+                
+                // Apply initial theme
+                if (settings.IsDarkMode)
+                {
+                    ApplyTheme(true);
+                }
+                
                 // Auto-focus search box
                 SearchBox.Focus();
                 
@@ -76,6 +85,46 @@ namespace MegaOutletCheck.Views
             {
                 WindowStyle = WindowStyle.SingleBorderWindow;
                 ResizeMode = ResizeMode.CanResize;
+            }
+        }
+
+        private void OnDarkModeChanged(object? sender, bool isDarkMode)
+        {
+            ApplyTheme(isDarkMode);
+        }
+
+        private void ApplyTheme(bool isDarkMode)
+        {
+            var app = Application.Current;
+            var resources = app.Resources;
+            
+            if (isDarkMode)
+            {
+                // Dark colors
+                resources["BackgroundBrush"] = System.Windows.Media.Brushes.Black;
+                resources["SurfaceBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 30));
+                resources["TextPrimaryBrush"] = System.Windows.Media.Brushes.White;
+                resources["TextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(180, 180, 180));
+                resources["PrimaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(96, 165, 250)); // Light blue
+                resources["ErrorBrush"] = System.Windows.Media.Brushes.OrangeRed;
+                resources["SuccessBrush"] = System.Windows.Media.Brushes.LightGreen;
+                resources["InStockBrush"] = System.Windows.Media.Brushes.LightGreen;
+                resources["OutOfStockBrush"] = System.Windows.Media.Brushes.Red;
+                resources["LowStockBrush"] = System.Windows.Media.Brushes.Orange;
+            }
+            else
+            {
+                // Light colors
+                resources["BackgroundBrush"] = System.Windows.Media.Brushes.White;
+                resources["SurfaceBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(248, 250, 252));
+                resources["TextPrimaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 41, 59));
+                resources["TextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 116, 139));
+                resources["PrimaryBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(37, 99, 235)); // Blue
+                resources["ErrorBrush"] = System.Windows.Media.Brushes.Red;
+                resources["SuccessBrush"] = System.Windows.Media.Brushes.Green;
+                resources["InStockBrush"] = System.Windows.Media.Brushes.Green;
+                resources["OutOfStockBrush"] = System.Windows.Media.Brushes.Red;
+                resources["LowStockBrush"] = System.Windows.Media.Brushes.Orange;
             }
         }
 

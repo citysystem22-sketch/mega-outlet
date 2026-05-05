@@ -66,6 +66,9 @@ namespace MegaOutletCheck.ViewModels
         [ObservableProperty]
         private bool _hasMoreResults = true;
         
+        [ObservableProperty]
+        private bool _isDarkMode;
+        
         public ObservableCollection<Product> Products { get; } = new();
         
         public MainViewModel(AppSettings settings, WooCommerceService wooService, ProductCacheService cacheService)
@@ -78,6 +81,7 @@ namespace MegaOutletCheck.ViewModels
             SettingsStoreUrl = settings.StoreUrl;
             SettingsApiKey = settings.ApiKey;
             SettingsApiSecret = settings.ApiSecret;
+            IsDarkMode = settings.IsDarkMode;
         }
 
         partial void OnSearchQueryChanged(string value)
@@ -264,10 +268,16 @@ namespace MegaOutletCheck.ViewModels
                 return;
             }
             
-            // Save settings
+            // Save settings (credentials are saved if RememberCredentials is enabled)
             _settings.StoreUrl = SettingsStoreUrl.TrimEnd('/');
-            _settings.ApiKey = SettingsApiKey;
-            _settings.ApiSecret = SettingsApiSecret;
+            
+            if (_settings.RememberCredentials)
+            {
+                _settings.ApiKey = SettingsApiKey;
+                _settings.ApiSecret = SettingsApiSecret;
+            }
+            
+            _settings.IsDarkMode = IsDarkMode;
             _settings.Save();
             
             // Reconfigure service
@@ -284,6 +294,21 @@ namespace MegaOutletCheck.ViewModels
                 await SearchProductsAsync(SearchQuery, 1);
             }
         }
+
+        partial void OnIsDarkModeChanged(bool value)
+        {
+            // Save dark mode preference
+            _settings.IsDarkMode = value;
+            _settings.Save();
+            
+            // Notify app to update theme (will be handled in MainWindow)
+            DarkModeChanged?.Invoke(this, value);
+        }
+        
+        /// <summary>
+        /// Event fired when dark mode changes
+        /// </summary>
+        public event EventHandler<bool>? DarkModeChanged;
 
         [RelayCommand]
         private async Task TestConnectionAsync()
