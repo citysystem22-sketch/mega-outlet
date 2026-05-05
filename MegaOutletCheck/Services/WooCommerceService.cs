@@ -236,7 +236,7 @@ namespace MegaOutletCheck.Services
                 }
             }
 
-            // Add authentication to URL
+            // Add auth credentials as query params
             var separator = urlBuilder.ToString().Contains('?') ? '&' : '?';
             urlBuilder.Append(separator);
             urlBuilder.Append("consumer_key=");
@@ -259,6 +259,8 @@ namespace MegaOutletCheck.Services
             where T : class
         {
             Exception? lastException = null;
+            string? lastResponse = null;
+            string? lastUrl = null;
             
             for (int attempt = 0; attempt < MaxRetries; attempt++)
             {
@@ -266,11 +268,26 @@ namespace MegaOutletCheck.Services
                 {
                     // Create a NEW request every time
                     using var request = requestFactory();
+                    
+                    // Log the URL being called
+                    lastUrl = request.RequestUri?.ToString() ?? "unknown";
+                    var logUrl = lastUrl.Length > 80 ? lastUrl.Substring(0, 80) + "..." : lastUrl;
+                    App.Log($"API Request #{attempt + 1}: {logUrl}");
+                    
                     var response = await _httpClient.SendAsync(request);
                     
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
+                        
+                        // Check if we got HTML instead of JSON (common error response)
+                        if (content.TrimStart().StartsWith("<") && !content.StartsWith("["))
+                        {
+                            throw new HttpRequestException(
+                                $"Server returned HTML instead of JSON. Check store URL is correct: {lastUrl}");
+                        }
+                        
+                        App.Log($"API Response success ({content.Length} chars)");
                         
                         // Handle specific types
                         if (typeof(T) == typeof(List<Product>))
@@ -290,27 +307,40 @@ namespace MegaOutletCheck.Services
                         
                         return JsonConvert.DeserializeObject<T>(content);
                     }
-                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                    else 
                     {
-                        return null;
-                    }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        throw new HttpRequestException("Invalid API keys");
-                    }
-                    else
-                    {
-                        response.EnsureSuccessStatusCode();
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        var errorPreview = errorContent.Length > 150 ? errorContent.Substring(0, 150) + "..." : errorContent;
+                        lastResponse = $"HTTP {(int)response.StatusCode}: {errorPreview}";
+                        App.Log($"API Error: {lastResponse}");
+                        
+                        if (response.StatusCode == HttpStatusCode.NotFound)
+                        {
+                            return null;
+                        }
+                        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            throw new HttpRequestException("Invalid API keys - check consumer key/secret");
+                        }
+                        else if (response.StatusCode == HttpStatusCode.Forbidden)
+                        {
+                            throw new HttpRequestException("Access denied - API may be blocked");
+                        }
+                        else
+                        {
+                            throw new HttpRequestException($"HTTP {(int)response.StatusCode}: {response.ReasonPhrase}");
+                        }
                     }
                 }
                 catch (HttpRequestException ex) when (attempt < MaxRetries - 1)
                 {
                     lastException = ex;
+                    App.Log($"API Retry #{attempt + 1} failed: {ex.Message}");
                     await Task.Delay(RetryDelayMs * (attempt + 1));
                 }
             }
             
-            throw lastException ?? new HttpRequestException("Request failed after retries");
+            throw lastException ?? new HttpRequestException($"Request failed. Last URL: {lastUrl}");
         }
 
         /// <summary>
