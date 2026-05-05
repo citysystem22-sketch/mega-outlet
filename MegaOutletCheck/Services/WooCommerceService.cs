@@ -244,13 +244,18 @@ namespace MegaOutletCheck.Services
             urlBuilder.Append("&consumer_secret=");
             urlBuilder.Append(WebUtility.UrlEncode(_consumerSecret));
 
-            var request = new HttpRequestMessage(HttpMethod.Get, urlBuilder.ToString());
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            return await SendWithRetryAsync<T>(request);
+            var finalUrl = urlBuilder.ToString();
+            
+            // Return a factory that creates a NEW request each time
+            return await SendWithRetryAsync<T>(() =>
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, finalUrl);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                return request;
+            });
         }
 
-        private async Task<T?> SendWithRetryAsync<T>(HttpRequestMessage request)
+        private async Task<T?> SendWithRetryAsync<T>(Func<HttpRequestMessage> requestFactory)
             where T : class
         {
             Exception? lastException = null;
@@ -259,6 +264,8 @@ namespace MegaOutletCheck.Services
             {
                 try
                 {
+                    // Create a NEW request every time
+                    using var request = requestFactory();
                     var response = await _httpClient.SendAsync(request);
                     
                     if (response.IsSuccessStatusCode)
