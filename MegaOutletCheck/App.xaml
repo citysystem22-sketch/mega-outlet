@@ -41,6 +41,7 @@
             <converters:PriceToDisplayConverter x:Key="PriceToDisplayConverter"/>
             <converters:ImageUrlToSourceConverter x:Key="ImageUrlToSourceConverter"/>
             <converters:InvertBoolConverter x:Key="InvertBoolConverter"/>
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
 
             <!-- Typography -->
             <FontFamily x:Key="DefaultFontFamily">Segoe UI Variable, Segoe UI, Arial</FontFamily>

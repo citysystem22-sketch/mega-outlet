@@ -148,37 +148,49 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Style="{StaticResource ProductCard}"
-                                    Width="240"
-                                    Height="280"
-                                    Margin="8"
+                                    Width="320"
+                                    Height="340"
+                                    Margin="10"
                                     MouseLeftButtonUp="ProductCard_Click"
                                     Tag="{Binding}">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="120"/>
+                                        <RowDefinition Height="160"/>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Product Image -->
-                                    <Border Grid.Row="0"
-                                            Background="#F1F5F9"
-                                            CornerRadius="8">
+                                    <!-- Product Image with Gallery -->
+                                    <Grid Grid.Row="0">
                                         <Image Source="{Binding PrimaryImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}"
                                                Stretch="UniformToFill"
                                                RenderOptions.BitmapScalingMode="HighQuality"/>
-                                    </Border>
+                                        
+                                        <!-- Image Count Badge -->
+                                        <Border Background="#000000AA"
+                                                CornerRadius="4"
+                                                Padding="6,2"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                Margin="8"
+                                                Visibility="{Binding Images.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                                            <TextBlock Foreground="White" FontSize="11">
+                                                <Run Text="{Binding Images.Count, Mode=OneWay}"/>
+                                                <Run Text=" zdj."/>
+                                            </TextBlock>
+                                        </Border>
+                                    </Grid>
 
                                     <!-- Product Name -->
                                     <TextBlock Grid.Row="1"
                                                Text="{Binding Name}"
-                                               FontSize="14"
+                                               FontSize="15"
                                                FontWeight="SemiBold"
                                                Foreground="{StaticResource TextPrimaryBrush}"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="Wrap"
-                                               MaxHeight="40"
-                                               Margin="0,12,0,8"/>
+                                               MaxHeight="44"
+                                               Margin="0,12,0,12"/>
 
                                     <!-- Price and Stock -->
                                     <Grid Grid.Row="2">
@@ -187,20 +199,27 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0"
-                                                   Text="{Binding DisplayPrice}"
-                                                   FontSize="18"
-                                                   FontWeight="Bold"
-                                                   Foreground="{StaticResource PrimaryBrush}"/>
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DisplayPrice}"
+                                                       FontSize="20"
+                                                       FontWeight="Bold"
+                                                       Foreground="{StaticResource PrimaryBrush}"/>
+                                            
+                                            <TextBlock Text=" zł"
+                                                       FontSize="14"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       VerticalAlignment="Bottom"
+                                                       Margin="2,0,0,3"/>
+                                        </StackPanel>
 
                                         <Border Grid.Column="1"
                                                 Background="{Binding Converter={StaticResource StockStatusToBrushConverter}}"
                                                 CornerRadius="4"
-                                                Padding="6,2"
-                                                MinWidth="28">
+                                                Padding="10,4"
+                                                MinWidth="36">
                                             <TextBlock Text="{Binding StockQuantityDisplay}"
                                                       Foreground="White"
-                                                      FontSize="11"
+                                                      FontSize="12"
                                                       FontWeight="Bold"
                                                       HorizontalAlignment="Center"/>
                                         </Border>
@@ -331,15 +350,19 @@
                 <!-- Product details -->
                 <ScrollViewer Grid.Row="1" Margin="16" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <!-- Image with placeholder -->
+                        <!-- Product Image Gallery - Larger Display -->
                         <Border Background="{StaticResource SurfaceBrush}"
                                 CornerRadius="12"
-                                Margin="0,16,0,16">
+                                Margin="0,16,0,16"
+                                MinHeight="320">
                             <Grid>
+                                <!-- Main Image -->
                                 <Image Source="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}"
-                                       MaxHeight="350"
+                                       MaxHeight="380"
                                        Stretch="Uniform"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       HorizontalAlignment="Center"/>
+                                
                                 <!-- Placeholder when no image -->
                                 <TextBlock Text="📷 Brak zdjęcia"
                                            FontSize="48"
@@ -347,6 +370,20 @@
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Visibility="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
+                                
+                                <!-- Image count indicator -->
+                                <Border Background="#000000AA"
+                                        CornerRadius="6"
+                                        Padding="10,4"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="12"
+                                        Visibility="{Binding SelectedProduct.Images.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                                    <TextBlock Foreground="White" FontSize="12" FontWeight="SemiBold">
+                                        <Run Text="{Binding SelectedProduct.Images.Count, Mode=OneWay}"/>
+                                        <Run Text=" zdjęć"/>
+                                    </TextBlock>
+                                </Border>
                             </Grid>
                         </Border>
 

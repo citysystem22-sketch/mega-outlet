@@ -38,7 +38,11 @@ namespace MegaOutletCheck.Models
         public int TotalSales { get; set; }
         public bool Virtual { get; set; }
         public bool Downloadable { get; set; }
+        
+        [JsonProperty("images")]
         public List<ProductImage> Images { get; set; } = new();
+        
+        [JsonProperty("categories")]
         public List<ProductCategory> Categories { get; set; } = new();
         public string AverageRating { get; set; } = string.Empty;
         public int ReviewCount { get; set; }
