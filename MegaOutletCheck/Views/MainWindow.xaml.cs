@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MegaOutletCheck.Models;
@@ -166,6 +167,20 @@ namespace MegaOutletCheck.Views
             {
                 _viewModel?.SelectProductCommand.Execute(product);
             }
+        }
+
+        private void CategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string category)
+            {
+                _viewModel.SearchQuery = category;
+            }
+        }
+
+        private void ViewAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Scroll to results or show all products
+            _viewModel.SearchQuery = "*";
         }
 
         private void SettingsOverlay_Click(object sender, MouseButtonEventArgs e)
