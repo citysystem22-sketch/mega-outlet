@@ -272,14 +272,14 @@
             <StackPanel HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Visibility="{Binding Products.Count, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}">
-                <TextBlock Text="📦"
+                <TextBlock Text="🔍"
                            FontSize="48"
                            HorizontalAlignment="Center"/>
-                <TextBlock Text="Nie znaleziono produktów"
+                <TextBlock Text="Wpisz nazwę produktu"
                            FontSize="20"
                            Foreground="{StaticResource TextSecondaryBrush}"
                            Margin="0,16,0,0"/>
-                <TextBlock Text="Spróbuj wpisać inną frazę"
+                <TextBlock Text="Szukaj po nazwie lub SKU"
                            FontSize="14"
                            Foreground="{StaticResource TextSecondaryBrush}"
                            HorizontalAlignment="Center"/>
@@ -388,8 +388,8 @@
                                        LineHeight="22"/>
                         </Border>
 
-                        <!-- Categories -->
-                        <ItemsControl ItemsSource="{Binding SelectedProduct.Categories}" Margin="0,16,0,0">
+                        <!-- Categories - Hidden -->
+                        <ItemsControl ItemsSource="{Binding SelectedProduct.Categories}" Margin="0,16,0,0" Visibility="Collapsed">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel/>
