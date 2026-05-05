@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MegaOutletCheck.Models
 {
@@ -100,6 +101,45 @@ namespace MegaOutletCheck.Models
         }
 
         public string PrimaryImageUrl => Images?.Count > 0 ? Images[0].Src : string.Empty;
+        
+        // Get all image URLs for gallery
+        public List<string> ImageUrls => Images?.Where(i => !string.IsNullOrEmpty(i.Src)).Select(i => i.Src).ToList() ?? new List<string>();
+        
+        // Get first N images for gallery
+        public List<string> GetImages(int count) => ImageUrls.Take(count).ToList();
+        
+        // Get all image URLs as single string (for debugging)
+        public string DebugImages => string.Join(", ", ImageUrls);
+        
+        // Display description - prefer short_description first, then full description, then placeholder
+        public string DisplayDescription
+        {
+            get
+            {
+                // Try short description (strip HTML tags for display)
+                if (!string.IsNullOrEmpty(ShortDescription))
+                {
+                    return StripHtml(ShortDescription);
+                }
+                // Try full description
+                if (!string.IsNullOrEmpty(Description))
+                {
+                    return StripHtml(Description);
+                }
+                return "Brak opisu produktu";
+            }
+        }
+        
+        // Full HTML description for advanced rendering
+        public string HtmlDescription => !string.IsNullOrEmpty(Description) ? Description : 
+                                  (!string.IsNullOrEmpty(ShortDescription) ? ShortDescription : "");
+        
+        private static string StripHtml(string html)
+        {
+            if (string.IsNullOrEmpty(html)) return "";
+            // Simple HTML tag removal
+            return System.Text.RegularExpressions.Regex.Replace(html, "<[^>]+>", "").Trim();
+        }
     }
 
     public class ProductImage

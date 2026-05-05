@@ -245,39 +245,72 @@
                 <!-- Product details -->
                 <ScrollViewer Grid.Row="1" Margin="16" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <!-- Image -->
-                        <Border Background="#F1F5F9"
+                        <!-- Image with placeholder -->
+                        <Border Background="{StaticResource SurfaceBrush}"
                                 CornerRadius="12"
                                 Margin="0,16,0,16">
-                            <Image Source="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}"
-                                   MaxHeight="300"
-                                   Stretch="UniformToFill"/>
+                            <Grid>
+                                <Image Source="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}"
+                                       MaxHeight="350"
+                                       Stretch="Uniform"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <!-- Placeholder when no image -->
+                                <TextBlock Text="📷 Brak zdjęcia"
+                                           FontSize="48"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding SelectedProduct.PrimaryImageUrl, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
+                            </Grid>
                         </Border>
 
-                        <!-- Price -->
-                        <TextBlock Text="{Binding SelectedProduct.DisplayPrice}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource PrimaryBrush}"/>
+                        <!-- Price Section -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="{Binding SelectedProduct.DisplayPrice}"
+                                       FontSize="32"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource PrimaryBrush}"/>
+                            <TextBlock Text="{Binding SelectedProduct.DisplayOriginalPrice}"
+                                       FontSize="18"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextDecorations="Strikethrough"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Visibility="{Binding SelectedProduct.DisplayOriginalPrice, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        </StackPanel>
 
-                        <!-- Stock status -->
+                        <!-- Stock status with clear badge -->
                         <Border Background="{Binding SelectedProduct, Converter={StaticResource StockStatusToBrushConverter}}"
                                 CornerRadius="8"
-                                Padding="16,8"
-                                Margin="0,12,0,0"
+                                Padding="16,10"
+                                Margin="0,0,0,16"
                                 HorizontalAlignment="Left">
-                            <TextBlock Text="{Binding SelectedProduct.StockDisplayText}"
-                                      Foreground="White"
-                                      FontSize="14"
-                                      FontWeight="SemiBold"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📦" FontSize="14" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding SelectedProduct.StockDisplayText}"
+                                          Foreground="White"
+                                          FontSize="15"
+                                          FontWeight="SemiBold"/>
+                            </StackPanel>
                         </Border>
 
-                        <!-- Description -->
-                        <TextBlock Text="{Binding SelectedProduct.ShortDescription}"
-                                   FontSize="14"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                   TextWrapping="Wrap"
-                                   Margin="0,16,0,0"/>
+                        <!-- Description Section -->
+                        <TextBlock Text="Opis produktu"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   Margin="0,8,0,8"/>
+                        
+                        <Border Background="{StaticResource SurfaceBrush}"
+                                CornerRadius="8"
+                                Padding="16"
+                                Margin="0,0,0,16">
+                            <TextBlock Text="{Binding SelectedProduct.DisplayDescription}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap"
+                                       LineHeight="22"/>
+                        </Border>
 
                         <!-- Categories -->
                         <ItemsControl ItemsSource="{Binding SelectedProduct.Categories}" Margin="0,16,0,0">
