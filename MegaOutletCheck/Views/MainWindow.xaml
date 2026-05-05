@@ -321,14 +321,14 @@
         <!-- Details Panel (slides in from right) -->
         <Border Grid.Row="0" Grid.RowSpan="2"
                 HorizontalAlignment="Right"
-                Width="400"
+                Width="500"
                 Background="{StaticResource SurfaceBrush}"
                 Visibility="{Binding IsDetailsPanelOpen, Converter={StaticResource BoolToVisibilityConverter}}">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="16" ShadowDepth="-4" Opacity="0.15" Color="Black"/>
             </Border.Effect>
             
-            <Grid>
+            <Grid Margin="24">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -452,15 +452,12 @@
                         <Border Background="{StaticResource SurfaceBrush}"
                                 CornerRadius="12"
                                 Padding="20"
-                                Margin="0,0,0,16"
-                                MinHeight="120">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
-                                <TextBlock Text="{Binding SelectedProduct.DisplayDescription}"
+                                Margin="0,0,0,16">
+                            <TextBlock Text="{Binding SelectedProduct.DisplayDescription}"
                                            FontSize="15"
                                            Foreground="{StaticResource TextSecondaryBrush}"
                                            TextWrapping="Wrap"
                                            LineHeight="26"/>
-                            </ScrollViewer>
                         </Border>
 
                         <!-- Categories - Hidden -->
