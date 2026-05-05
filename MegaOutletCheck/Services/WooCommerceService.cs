@@ -131,144 +131,29 @@ namespace MegaOutletCheck.Services
             }
             catch (HttpRequestException ex) when (ex.Message.Contains("401") || ex.Message.Contains("Unauthorized"))
             {
-                // API keys invalid - return demo products with different stock statuses
-                App.Log("API unauthorized - showing demo products");
-                return GetDemoProducts(query);
+                // API keys invalid - throw error, no demo products
+                App.Log($"API error: {ex.Message}");
+                throw new InvalidOperationException($"Błąd autoryzacji API: {ex.Message}");
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                // Return cached on error
+                // Network error - try cache first
+                App.Log($"API network error: {ex.Message}");
                 if (_searchCache.TryGetValue(cacheKey, out var cachedResults))
                 {
                     return cachedResults.products;
                 }
-                
-                // Return demo products when API fails
-                return GetDemoProducts(query);
+                throw; // No fallback - return empty
             }
-        }
-
-        /// <summary>
-        /// Get demo products when API is unavailable - shows various stock statuses
-        /// </summary>
-        private Product[] GetDemoProducts(string query)
-        {
-            var queryLower = query.ToLowerInvariant();
-            var allProducts = new List<Product>
+            catch
             {
-                new Product
+                // Other errors - try cache
+                if (_searchCache.TryGetValue(cacheKey, out var cachedResults))
                 {
-                    Id = 1,
-                    Name = "Samsung Galaxy A54",
-                    RegularPrice = "1699",
-                    SalePrice = "1499",
-                    Price = "1499",
-                    StockStatus = "instock",
-                    StockQuantity = 25,
-                    ShortDescription = "Smartfon 5G",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Id = 101, Src = "https://picsum.photos/seed/samsung1/600/600", Name = "Samsung Front" },
-                        new ProductImage { Id = 102, Src = "https://picsum.photos/seed/samsung2/600/600", Name = "Samsung Back" },
-                        new ProductImage { Id = 103, Src = "https://picsum.photos/seed/samsung3/600/600", Name = "Samsung Side" }
-                    }
-                },
-                new Product
-                {
-                    Id = 2,
-                    Name = "Dell XPS 15 Laptop",
-                    RegularPrice = "5999",
-                    SalePrice = "5499",
-                    Price = "5499",
-                    StockStatus = "instock",
-                    StockQuantity = 8,
-                    ShortDescription = "Laptop i7",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Id = 201, Src = "https://picsum.photos/seed/dell1/600/600", Name = "Dell Front" },
-                        new ProductImage { Id = 202, Src = "https://picsum.photos/seed/dell2/600/600", Name = "Dell Open" },
-                        new ProductImage { Id = 203, Src = "https://picsum.photos/seed/dell3/600/600", Name = "Dell Keyboard" },
-                        new ProductImage { Id = 204, Src = "https://picsum.photos/seed/dell4/600/600", Name = "Dell Side" }
-                    }
-                },
-                new Product
-                {
-                    Id = 3,
-                    Name = "Sony WH-1000XM5",
-                    RegularPrice = "1499",
-                    SalePrice = "1199",
-                    Price = "1199",
-                    StockStatus = "instock",
-                    StockQuantity = 3,
-                    ShortDescription = "Słuchawki ANC",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Id = 301, Src = "https://picsum.photos/seed/sony1/600/600", Name = "Sony Black" },
-                        new ProductImage { Id = 302, Src = "https://picsum.photos/seed/sony2/600/600", Name = "Sony Case" }
-                    }
-                },
-                new Product
-                {
-                    Id = 4,
-                    Name = "Apple iPad Pro",
-                    RegularPrice = "7999",
-                    Price = "7999",
-                    StockStatus = "outofstock",
-                    StockQuantity = 0,
-                    ShortDescription = "Tablet M2",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Id = 401, Src = "https://picsum.photos/seed/ipad1/600/600", Name = "iPad Front" },
-                        new ProductImage { Id = 402, Src = "https://picsum.photos/seed/ipad2/600/600", Name = "iPad Back" }
-                    }
-                },
-                new Product
-                {
-                    Id = 5,
-                    Name = "Apple Watch Ultra",
-                    RegularPrice = "4299",
-                    SalePrice = "3999",
-                    Price = "3999",
-                    StockStatus = "instock",
-                    StockQuantity = 15,
-                    ShortDescription = "Zegarek",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Id = 501, Src = "https://picsum.photos/seed/watch1/600/600", Name = "Watch Face" },
-                        new ProductImage { Id = 502, Src = "https://picsum.photos/seed/watch2/600/600", Name = "Watch Band" },
-                        new ProductImage { Id = 503, Src = "https://picsum.photos/seed/watch3/600/600", Name = "Watch Side" }
-                    }
+                    return cachedResults.products;
                 }
-            };
-
-            // DEBUG: Log stock values
-            foreach (var p in allProducts)
-            {
-                App.Log($"[DEMO] {p.Name}: StockStatus={p.StockStatus}, StockQuantity={p.StockQuantity}, IsInStock={p.IsInStock}, Text={p.StockDisplayText}");
+                throw; // No fallback - return empty
             }
-
-            // Return all products (including out of stock) - let the UI handle visibility
-            if (string.IsNullOrWhiteSpace(query) || query == "*")
-            {
-                return allProducts.ToArray();
-            }
-
-            return allProducts
-                .Where(p => p.Name.ToLowerInvariant().Contains(queryLower) ||
-                          p.ShortDescription.ToLowerInvariant().Contains(queryLower))
-                .ToArray();
-        }
-
-        /// <summary>
-        /// Get all products with pagination
-        /// </summary>
-        public async Task<Product[]> GetAllProductsAsync(int page = 1, int perPage = 20)
-        {
-            return await GetProductsAsync(new Dictionary<string, string>
-            {
-                ["per_page"] = perPage.ToString(),
-                ["page"] = page.ToString()
-            });
         }
 
         /// <summary>
