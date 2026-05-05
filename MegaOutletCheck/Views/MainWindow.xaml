@@ -202,21 +202,40 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <!-- No results message -->
+            <!-- Instructions / Help message -->
             <StackPanel HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Visibility="{Binding Products.Count, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}">
-                <TextBlock Text="📦"
+                       Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}">
+                <TextBlock Text="🔍"
                            FontSize="48"
                            HorizontalAlignment="Center"/>
-                <TextBlock Text="Nie znaleziono produktów"
+                <TextBlock Text="Wpisz nazwę produktu"
                            FontSize="20"
                            Foreground="{StaticResource TextSecondaryBrush}"
                            Margin="0,16,0,0"/>
-                <TextBlock Text="Spróbuj wpisać inną frazę"
+                <TextBlock Text="Szukaj produktów po nazwie lub SKU"
                            FontSize="14"
                            Foreground="{StaticResource TextSecondaryBrush}"
                            HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- No results message -->
+            <StackPanel HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="⚠️"
+                           FontSize="48"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Błąd połączenia"
+                           FontSize="20"
+                           Foreground="{StaticResource ErrorBrush}"
+                           Margin="0,16,0,0"/>
+                <TextBlock Text="{Binding ErrorMessage}"
+                           FontSize="14"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           MaxWidth="300"/>
             </StackPanel>
         </Grid>
 

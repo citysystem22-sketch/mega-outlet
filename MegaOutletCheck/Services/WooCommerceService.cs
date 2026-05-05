@@ -159,84 +159,69 @@ namespace MegaOutletCheck.Services
                 new Product
                 {
                     Id = 1,
-                    Name = "Smartphone Samsung Galaxy A54 5G",
+                    Name = "Samsung Galaxy A54",
                     RegularPrice = "1699",
                     SalePrice = "1499",
                     Price = "1499",
                     StockStatus = "instock",
                     StockQuantity = 25,
-                    ShortDescription = "Nowoczesny smartfon z ekranem 6.4 cala, 8GB RAM i aparatem 50MP. Obsługuje 5G.",
-                    Description = "<p>Nowoczesny smartfon Samsung Galaxy A54 5G</p><ul><li>Ekran: 6.4 cala Super AMOLED</li><li>RAM: 8GB</li><li>Aparat: 50MP</li><li>5G: Tak</li></ul>",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Src = "https://via.placeholder.com/400x400/2563EB/fff?text=Samsung+Galaxy" }
-                    }
+                    ShortDescription = "Smartfon 5G",
+                    Images = new List<ProductImage>()
                 },
                 new Product
                 {
                     Id = 2,
-                    Name = "Laptop Dell XPS 15",
+                    Name = "Dell XPS 15 Laptop",
                     RegularPrice = "5999",
                     SalePrice = "5499",
                     Price = "5499",
                     StockStatus = "instock",
                     StockQuantity = 8,
-                    ShortDescription = "Profesjonalny laptop 15.6 cala z procesorem i7 i 16GB RAM.Idealny do pracy.",
-                    Description = "<p>Dell XPS 15 - laptop dla profesjonalistów</p>",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Src = "https://via.placeholder.com/400x400/10B981/fff?text=Dell+XPS" }
-                    }
+                    ShortDescription = "Laptop i7",
+                    Images = new List<ProductImage>()
                 },
                 new Product
                 {
                     Id = 3,
-                    Name = "Słuchawki Sony WH-1000XM5",
+                    Name = "Sony WH-1000XM5",
                     RegularPrice = "1499",
                     SalePrice = "1199",
                     Price = "1199",
                     StockStatus = "instock",
                     StockQuantity = 3,
-                    ShortDescription = "Bezprzewodowe słuchawki z redukcją szumów. Ostatnie sztuki!",
-                    Description = "<p>Topowe słuchawki Sony z ANC</p>",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Src = "https://via.placeholder.com/400x400/F59E0B/fff?text=Sony+XM5" }
-                    }
+                    ShortDescription = "Słuchawki ANC",
+                    Images = new List<ProductImage>()
                 },
                 new Product
                 {
                     Id = 4,
-                    Name = "Tablet Apple iPad Pro 12.9",
+                    Name = "Apple iPad Pro",
                     RegularPrice = "7999",
-                    SalePrice = "",
                     Price = "7999",
                     StockStatus = "outofstock",
                     StockQuantity = 0,
-                    ShortDescription = "Profesjonalny tablet Apple z procesorem M2. Aktualnie niedostępny - oczekiwanie na dostawę.",
-                    Description = "<p>iPad Pro 12.9 z chip M2</p>",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Src = "https://via.placeholder.com/400x400/EF4444/fff?text=iPad+Pro" }
-                    }
+                    ShortDescription = "Tablet M2",
+                    Images = new List<ProductImage>()
                 },
                 new Product
                 {
                     Id = 5,
-                    Name = "Zegarek Apple Watch Ultra",
+                    Name = "Apple Watch Ultra",
                     RegularPrice = "4299",
                     SalePrice = "3999",
                     Price = "3999",
                     StockStatus = "instock",
                     StockQuantity = 15,
-                    ShortDescription = "Sportowy zegarek Apple z GPS i wodoszczelnością do 100m.",
-                    Description = "<p>Apple Watch Ultra dla sportowców</p>",
-                    Images = new List<ProductImage>
-                    {
-                        new ProductImage { Src = "https://via.placeholder.com/400x400/8B5CF6/fff?text=Apple+Watch" }
-                    }
+                    ShortDescription = "Zegarek",
+                    Images = new List<ProductImage>()
                 }
             };
+
+            // DEBUG: Log stock values
+            foreach (var p in allProducts)
+            {
+                App.Log($"[DEMO] {p.Name}: StockStatus={p.StockStatus}, StockQuantity={p.StockQuantity}, IsInStock={p.IsInStock}, Text={p.StockDisplayText}");
+            }
 
             // Filter by query - only show in-stock products
             if (string.IsNullOrWhiteSpace(query) || query == "*")
