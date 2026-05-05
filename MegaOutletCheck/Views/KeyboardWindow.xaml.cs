@@ -17,6 +17,14 @@ namespace MegaOutletCheck.Views
         public KeyboardWindow()
         {
             InitializeComponent();
+            
+            // Set default position centered on screen if no saved config
+            if (Left <= 0 || Top <= 0)
+            {
+                Left = SystemParameters.PrimaryScreenWidth / 2 - Width / 2;
+                Top = SystemParameters.PrimaryScreenHeight - Height - 100;
+            }
+            
             LoadPosition();
             Closing += KeyboardWindow_Closing;
         }
