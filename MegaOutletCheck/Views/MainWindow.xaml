@@ -40,14 +40,21 @@
 
                 <!-- Search Box -->
                 <Grid Grid.Column="0" Margin="0,0,16,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
                     <TextBox x:Name="SearchBox"
+                             Grid.Row="0"
                              Style="{StaticResource SearchTextBox}"
                              Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                              GotFocus="SearchBox_GotFocus"
                              KeyDown="SearchBox_KeyDown"/>
                     
                     <!-- Placeholder text -->
-                    <TextBlock Text="🔍 Szukaj produkty, SKU, lub słowa kluczowe..."
+                    <TextBlock Grid.Row="0"
+                               Text="🔍 Szukaj produkty, SKU, lub słowa kluczowe..."
                                Foreground="{StaticResource TextSecondaryBrush}"
                                FontSize="18"
                                Margin="44,14,16,14"
@@ -55,24 +62,24 @@
                                Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
                     
                     <!-- Clear button -->
-                    <Button Content="✕"
+                    <Button Grid.Row="0"
+                            Content="✕"
                             Style="{StaticResource IconButton}"
                             HorizontalAlignment="Right"
                             Margin="0,0,8,0"
                             Command="{Binding ClearSearchCommand}"
                             Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}}"
                             ToolTip="Wyczyść"/>
+                    
+                    <!-- Loading bar under search (browser-style) -->
+                    <ProgressBar Grid.Row="1"
+                                IsIndeterminate="True"
+                                Height="3"
+                                Margin="0,2,0,0"
+                                Background="Transparent"
+                                Foreground="#3B82F6"
+                                Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
-                
-                <!-- Loading bar under search (browser-style) -->
-                <ProgressBar Grid.Row="1"
-                            IsIndeterminate="True"
-                            Height="3"
-                            Margin="0,2,0,0"
-                            VerticalAlignment="Top"
-                            Background="Transparent"
-                            Foreground="#3B82F6"
-                            Visibility="{Binding IsSearching, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 
                 <!-- Filter: Only Available -->
                 <CheckBox Grid.Column="1"
