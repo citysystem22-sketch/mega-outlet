@@ -67,11 +67,21 @@ namespace MegaOutletCheck.Models
         {
             get
             {
-                if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "outofstock") return "Niedostępny";
+                // Out of stock
                 if (StockQuantity <= 0) return "Niedostępny";
-                if (StockQuantity <= 5) return $"Ostatnie sztuki ({StockQuantity})";
-                if (StockQuantity > 5) return $"Dostępny ({StockQuantity})";
-                return "Dostępny";
+                
+                // Show quantity only
+                return StockQuantity == 1 ? "Dostępny: 1 szt." : $"Dostępny: {StockQuantity} szt.";
+            }
+        }
+
+        // Simple number for badge
+        public string StockQuantityDisplay
+        {
+            get
+            {
+                if (StockQuantity <= 0) return string.Empty;
+                return StockQuantity.ToString();
             }
         }
 
