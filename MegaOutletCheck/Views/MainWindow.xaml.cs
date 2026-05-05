@@ -13,10 +13,34 @@ namespace MegaOutletCheck.Views
     public partial class MainWindow : Window
     {
         private MainViewModel? _viewModel;
+        private KeyboardWindow? _keyboardWindow;
 
         public MainWindow()
         {
             InitializeComponent();
+            _keyboardWindow = new KeyboardWindow();
+            _keyboardWindow.KeyPressed += key =>
+            {
+                if (key == "BACKSPACE")
+                {
+                    if (SearchBox.Text.Length > 0)
+                        SearchBox.Text = SearchBox.Text[..^1];
+                }
+                else
+                {
+                    SearchBox.Text += key;
+                }
+                SearchBox.CaretIndex = SearchBox.Text.Length;
+                SearchBox.Focus();
+            };
+            _keyboardWindow.SearchRequested += () =>
+            {
+                // Just set SearchQuery - binding triggers search via property change
+                if (_viewModel != null)
+                {
+                    _viewModel.SearchQuery = SearchBox.Text;
+                }
+            };
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -206,13 +230,18 @@ namespace MegaOutletCheck.Views
 
         private void KeyboardToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (KeyboardPanel.Visibility == Visibility.Visible)
+            if (_keyboardWindow == null) return;
+            
+            if (_keyboardWindow.IsVisible)
             {
-                KeyboardPanel.Visibility = Visibility.Collapsed;
+                _keyboardWindow.Hide();
             }
             else
             {
-                KeyboardPanel.Visibility = Visibility.Visible;
+                // Position near bottom-right of main window
+                _keyboardWindow.Left = Left + ActualWidth - _keyboardWindow.Width - 80;
+                _keyboardWindow.Top = Top + ActualHeight - _keyboardWindow.Height - 100;
+                _keyboardWindow.Show();
                 SearchBox.Focus();
             }
         }
