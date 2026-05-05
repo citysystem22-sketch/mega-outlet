@@ -7,13 +7,10 @@ obj/
 *.log
 .vs/
 
-# Build output (keep publish)
- publish/
+# Build output
 MegaOutletCheck/publish/
- 
-# Secrets - do NOT commit API keys
-# The settings.json in publish folder is configured with real API keys
-# Remove it before committing if concerned
+
+# Secrets - API keys in settings.json should not be committed
 settings.json
 
 # Windows
@@ -23,3 +20,24 @@ Thumbs.db
 # IDE
 .idea/
 *.swp
+
+# Miscellaneous
+*.class
+*.pyc
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Android Studio
+/android/app/debug
+/android/app/profile
+/android/app/release
