@@ -59,6 +59,14 @@
                             Visibility="{Binding SearchQuery, Converter={StaticResource StringToVisibilityConverter}}"
                             ToolTip="Wyczyść"/>
                 </Grid>
+                
+                <!-- Filter: Only Available -->
+                <CheckBox Grid.Column="1"
+                          Content="✓ Tylko dostępne"
+                          IsChecked="{Binding ShowOnlyAvailable}"
+                          VerticalAlignment="Center"
+                          FontSize="13"
+                          Foreground="{StaticResource TextPrimaryBrush}"/>
 
                 <!-- On-Screen Keyboard Toggle -->
                 <Button Grid.Column="1"

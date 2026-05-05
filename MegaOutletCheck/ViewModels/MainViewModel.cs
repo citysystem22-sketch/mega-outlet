@@ -38,6 +38,9 @@ namespace MegaOutletCheck.ViewModels
         
         [ObservableProperty]
         private bool _isDetailsPanelOpen;
+
+        [ObservableProperty]
+        private bool _showOnlyAvailable = true; // Default: show only available products
         
         [ObservableProperty]
         private bool _isSettingsOpen;
@@ -142,6 +145,12 @@ namespace MegaOutletCheck.ViewModels
                 
                 var results = await _wooService.SearchProductsAsync(query, page, _settings.ResultsPageSize);
                 
+                // Apply "show only available" filter
+                if (ShowOnlyAvailable && results != null)
+                {
+                    results = results.Where(p => p.IsInStock).ToArray();
+                }
+                
                 IsOfflineMode = false;
                 
                 if (results != null && results.Length > 0)
@@ -172,6 +181,13 @@ namespace MegaOutletCheck.ViewModels
                     if (page == 1 && Products.Count == 0)
                     {
                         var cachedResults = _cacheService.SearchProducts(query);
+                        
+                        // Apply filter if enabled
+                        if (ShowOnlyAvailable)
+                        {
+                            cachedResults = cachedResults.Where(p => p.IsInStock).ToList();
+                        }
+                        
                         foreach (var product in cachedResults)
                         {
                             if (!Products.Any(p => p.Id == product.Id))
@@ -200,6 +216,13 @@ namespace MegaOutletCheck.ViewModels
                 if (Products.Count == 0)
                 {
                     var cachedResults = _cacheService.SearchProducts(query);
+                    
+                    // Apply filter if enabled
+                    if (ShowOnlyAvailable)
+                    {
+                        cachedResults = cachedResults.Where(p => p.IsInStock).ToList();
+                    }
+                    
                     foreach (var product in cachedResults)
                     {
                         Products.Add(product);
@@ -303,6 +326,15 @@ namespace MegaOutletCheck.ViewModels
             
             // Notify app to update theme (will be handled in MainWindow)
             DarkModeChanged?.Invoke(this, value);
+        }
+        
+        partial void OnShowOnlyAvailableChanged(bool value)
+        {
+            // Re-search when filter changes
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                _ = SearchProductsAsync(SearchQuery, 1);
+            }
         }
         
         /// <summary>
