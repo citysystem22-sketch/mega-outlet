@@ -32,12 +32,46 @@ namespace MegaOutletCheck.Models
         public string AverageRating { get; set; } = string.Empty;
         public int ReviewCount { get; set; }
         public int StockQuantity { get; set; }
-        public string StockStatus { get; set; } = string.Empty;
+        public string StockStatus { get; set; } = "instock";
         public bool ManageStock { get; set; }
         public string Stock { get; set; } = string.Empty;
         public List<ProductAttribute> Attributes { get; set; } = new();
         public List<int> Variants { get; set; } = new();
         public string Permalink { get; set; } = string.Empty;
+
+        // Stock logic - CORRECT
+        public bool IsInStock
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "instock") return true;
+                if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "outofstock") return false;
+                return StockQuantity > 0;
+            }
+        }
+        
+        public bool IsOutOfStock
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "outofstock") return true;
+                return StockQuantity <= 0;
+            }
+        }
+        
+        public bool IsLowStock => IsInStock && StockQuantity > 0 && StockQuantity <= 5;
+
+        public string StockDisplayText
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(StockStatus) && StockStatus.ToLowerInvariant() == "outofstock") return "Niedostępny";
+                if (StockQuantity <= 0) return "Niedostępny";
+                if (StockQuantity <= 5) return $"Ostatnie sztuki ({StockQuantity})";
+                if (StockQuantity > 5) return $"Dostępny ({StockQuantity})";
+                return "Dostępny";
+            }
+        }
 
         // Computed properties for UI - with fallbacks for missing data
         public string DisplayPrice
@@ -66,46 +100,6 @@ namespace MegaOutletCheck.Models
         public string DisplayOriginalPrice => !string.IsNullOrEmpty(SalePrice) && SalePrice != "0" && SalePrice != RegularPrice 
             ? $"{RegularPrice} zł" 
             : string.Empty;
-
-        public bool IsInStock
-        {
-            get
-            {
-                // Stock status from WooCommerce: "instock", "outofstock", "onbackorder"
-                if (StockStatus == "instock") return true;
-                if (StockStatus == "outofstock") return false;
-                if (StockStatus == "onbackorder") return false;
-                // Fallback: if stock quantity > 0, consider in stock
-                return StockQuantity > 0;
-            }
-        }
-        
-        public bool IsOutOfStock => StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity <= 0;
-        
-        public bool IsLowStock => (StockStatus == "instock" || StockQuantity > 0) && StockQuantity > 0 && StockQuantity <= 5;
-
-        public string StockDisplayText
-        {
-            get
-            {
-                // Check out of stock first
-                if (StockStatus == "outofstock" || Stock == "outofstock" || StockQuantity <= 0) 
-                    return "Niedostępny";
-                // Low stock (1-5)
-                if (StockQuantity > 0 && StockQuantity <= 5) 
-                    return $"Ostatnie sztuki ({StockQuantity})";
-                // In stock with quantity
-                if (StockQuantity > 5) 
-                    return $"Dostępny ({StockQuantity})";
-                // Just "instock" with no quantity tracking
-                if (StockStatus == "instock") 
-                    return "Dostępny";
-                // On back order
-                if (StockStatus == "onbackorder") 
-                    return "Zamówienie oczekujące";
-                return "Sprawdź w sklepie";
-            }
-        }
 
         public string PrimaryImageUrl => Images?.Count > 0 ? Images[0].Src : string.Empty;
         
