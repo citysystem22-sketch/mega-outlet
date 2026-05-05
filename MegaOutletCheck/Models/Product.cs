@@ -208,6 +208,22 @@ namespace MegaOutletCheck.Models
         
         [JsonProperty("alt")]
         public string Alt { get; set; } = string.Empty;
+        
+        // Constructor to normalize
+        public ProductImage() { }
+        
+        // Static factory to create from any JSON format
+        public static ProductImage FromJson(dynamic json)
+        {
+            if (json == null) return new ProductImage();
+            return new ProductImage
+            {
+                Id = json.id ?? 0,
+                Src = json.src ?? json.url ?? "",
+                Name = json.name ?? "",
+                Alt = json.alt ?? ""
+            };
+        }
     }
 
     public class ProductCategory

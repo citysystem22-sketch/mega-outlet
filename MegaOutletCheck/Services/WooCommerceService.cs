@@ -121,6 +121,17 @@ namespace MegaOutletCheck.Services
                     ["page"] = page.ToString()
                 });
 
+                // DEBUG: Log image info from API
+                if (results != null)
+                {
+                    foreach (var p in results.Take(3))
+                    {
+                        var imageCount = p.Images?.Count ?? 0;
+                        var imgUrls = p.Images?.Select(i => i.Src).Take(3).ToList() ?? new List<string>();
+                        App.Log($"[API] {p.Name}: Images={imageCount}, URLs={string.Join(",", imgUrls)}");
+                    }
+                }
+
                 // Cache the results
                 if (_settings.EnableCache && results.Length > 0)
                 {
