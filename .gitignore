@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+.vs/
+
+# Build output (keep publish)
+ publish/
+MegaOutletCheck/publish/
+ 
+# Secrets - do NOT commit API keys
+# The settings.json in publish folder is configured with real API keys
+# Remove it before committing if concerned
+settings.json
+
+# Windows
+Thumbs.db
+*.ico
+
+# IDE
+.idea/
+*.swp
